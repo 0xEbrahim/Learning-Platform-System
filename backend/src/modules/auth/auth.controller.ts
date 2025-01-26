@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { asyncHandler } from "../../utils/asyncHandler";
 import { authService } from "./auth.service";
 import ApiError from "../../utils/ApiError";
+import { IActivationBody } from "../../@types/body";
 
 export const register = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -12,5 +13,11 @@ export const register = asyncHandler(
       status: "Success",
       message: "Please review your email to activate your account",
     });
+  }
+);
+
+export const activateEmail = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    
   }
 );
