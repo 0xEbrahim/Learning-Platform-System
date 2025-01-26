@@ -14,3 +14,15 @@ export const authValidation = z.object({
     role: z.enum(["student", "teacher"] as const),
   }),
 });
+
+export const activateEmailValidation = z.object({
+  body: z.object({
+    token: z.string(),
+  }),
+});
+
+export const confirmEmailValidation = z.object({
+  body: z.object({
+    email: z.string().email("Invalid Email, please try another one"),
+  }),
+});

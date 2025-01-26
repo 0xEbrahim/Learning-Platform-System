@@ -1,3 +1,7 @@
 export type IActivationBody = {
-    token: string
-}
+  token: string;
+};
+
+export type IConfirmEmail = {
+  email: string;
+};

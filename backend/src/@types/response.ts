@@ -1,4 +1,5 @@
 export type IResponse = {
-    message: string,
-    statusCode: number
-}
+  status: string;
+  message: string;
+  statusCode: number;
+};
