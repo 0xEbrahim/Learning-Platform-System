@@ -1,6 +1,11 @@
 import crypto from "crypto";
 import { Document } from "mongoose";
-import { IActivationBody, IConfirmEmail, ILoginBody } from "../../@types/body";
+import {
+  IActivationBody,
+  IConfirmEmail,
+  ILoginBody,
+  IUpdatePasswordBody,
+} from "../../@types/body";
 import sendEmail from "../../config/email";
 import { generateActivationTemplate } from "../../views/ActivationTemplate";
 import { IUser } from "../users/user.interface";
@@ -102,6 +107,26 @@ class AuthService {
     const refreshToken = generateRefreshToken(user._id as string);
     result.token = token;
     result.refreshToken = refreshToken;
+    return result;
+  }
+
+  async updatePassword(Payload: IUpdatePasswordBody): Promise<IResponse> {
+    const { user, oldPassword, password } = Payload;
+    const result: IResponse = {
+      message:
+        "Password updated successfully and you have been logged-out. please login again with the new password",
+      status: "Success",
+      statusCode: 200,
+    };
+    if (!user.comparePassword(oldPassword)) {
+      result.message = "Old password is wrong, please try again";
+      result.status = "Error";
+      result.statusCode = 401;
+      return result;
+    }
+    user.password = password;
+    user.passwordChangedAt = new Date(Date.now());
+    await user.save();
     return result;
   }
 }

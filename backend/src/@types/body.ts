@@ -1,3 +1,6 @@
+import { Document } from "mongoose";
+import { IUser } from "../modules/users/user.interface";
+
 export type IActivationBody = {
   token: string;
 };
@@ -9,4 +12,11 @@ export type IConfirmEmail = {
 export type ILoginBody = {
   email: string;
   password: string;
+};
+
+export type IUpdatePasswordBody = {
+  user: Document & IUser;
+  oldPassword: string;
+  password: string;
+  confirmPassword: string;
 };
