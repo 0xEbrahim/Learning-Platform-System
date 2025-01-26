@@ -20,4 +20,6 @@ export interface IUser {
   twoStepAuth?: boolean;
   OTP?: string;
   OTPExpires?: Date;
+  comparePassword: (password: string) => Promise<Boolean>;
+  generateEmailConfirmationToken: () => string;
 }
