@@ -22,7 +22,7 @@ export const isAuthenticated = asyncHandler(
     });
     if (blackListed)
       return next(
-        new ApiError("Invalid tokenm please login and try again", 401)
+        new ApiError("Invalid token, please login and try again", 401)
       );
     const decoded: IDecodedPayload = await verifyToken(token);
     const user: (Document & IUser) | null = await User.findById(decoded.id);
