@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import ApiError from "../utils/ApiError";
-import { IDecodedPayload } from "../@types/token";
+import { IDecodedPayload } from "../types/token";
 import { verifyToken } from "../utils/JWT/tokens";
 import { asyncHandler } from "../utils/asyncHandler";
 import { User } from "../modules/users/user.model";
@@ -33,7 +33,7 @@ export const isAuthenticated = asyncHandler(
           400
         )
       );
-    req.user = user;
+    // req.user = user;
     next();
   }
 );

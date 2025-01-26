@@ -1,5 +1,5 @@
 import nodemailer, { Transporter } from "nodemailer";
-import { IEmail } from "../@types/email";
+import { IEmail } from "../types/email";
 import config from "./env";
 const sendEmail = async (options: IEmail) => {
   const transporter: Transporter = nodemailer.createTransport({

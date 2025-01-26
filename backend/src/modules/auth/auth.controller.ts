@@ -3,7 +3,7 @@ import { asyncHandler } from "../../utils/asyncHandler";
 import { authService } from "./auth.service";
 import ApiError from "../../utils/ApiError";
 import config from "../../config/env";
-import { IResponse } from "../../@types/response";
+import { IResponse } from "../../types/response";
 
 export const register = asyncHandler(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -60,7 +60,7 @@ export const login = asyncHandler(
 
 export const updatePassword = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    req.body.user = req.user;
+    // req.body.user = req.user;
     const data = await authService.updatePassword(req.body);
     res.status(data.statusCode).json({
       status: data.status,

@@ -5,12 +5,12 @@ import {
   IConfirmEmail,
   ILoginBody,
   IUpdatePasswordBody,
-} from "../../@types/body";
+} from "../../types/body";
 import sendEmail from "../../config/email";
 import { generateActivationTemplate } from "../../views/ActivationTemplate";
 import { IUser } from "../users/user.interface";
 import { User } from "../users/user.model";
-import { IResponse } from "../../@types/response";
+import { IResponse } from "../../types/response";
 import { generateRefreshToken, generateToken } from "../../utils/JWT/tokens";
 class AuthService {
   async register(Payload: IUser): Promise<IUser | null> {

@@ -14,6 +14,7 @@ import {
   register,
   updatePassword,
 } from "./auth.controller";
+import {isAuthenticated} from "../../middlewares/isAuthenticated"
 const router = express.Router();
 
 router.post("/register", validate(authValidation), register);
@@ -28,6 +29,6 @@ router.patch(
   validate(updatePasswordValidation),
   updatePassword
 );
-router.patch("/confirm-email", validate(confirmEmailValidation), confirmEmail);
+router.patch("/confirm-email", isAuthenticated,validate(confirmEmailValidation), confirmEmail);
 
 export const authRouter = router;
