@@ -1,0 +1,102 @@
+*{  
+    box-sizing:border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+body{
+    font-family: "Poppins", serif;
+    background-color:var(--main-color);
+}
+:root{
+    --main-color:#503E9D;
+}
+a{
+    text-decoration: none;
+    color:var(--main-color);
+}
+a:hover{
+    color:var(--main-color);
+}
+/* @media(min-width:1200px){
+    .container{
+        width:900px;
+    }
+}
+@media(max-width:1199px){
+    .container{
+        max-width:800px;
+    }
+}
+@media(max-width:991px){
+    .container{
+        width:700px;
+    }
+}
+@media(max-width:768px){
+    .container{
+        width:90%;
+    }
+} */
+.container{
+    max-width:1000px;
+    height:400px;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    overflow: hidden;
+}
+.container form{
+    width:60%;
+    height:400px;
+    background-color: #fff;
+    padding:10%;
+    border:1px solid #eee;
+    border-radius: 10px;
+}
+.container .login-form{
+    transform: translateX(2000px);
+}
+/* .container form .login-form.active{
+    transform: translateX(0px);
+} */
+.container .reg-form{
+    transform: translateX(2000px);
+    transition:0.5s ease;
+    transition-delay: 0s;
+}
+.container .login-form{
+    transform: translateX(2000px);
+    transition:0.6s ease;
+    transition-delay: 0s;
+}
+.container form.active{
+    transform:translateX(0);
+    transition: 0.6s ease;
+    transition-delay: 0s;
+}
+input[type=text],input[type=email],input[type=password]{
+    width:100%;
+    padding:10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    border:1px solid var(--main-color);
+    caret-color: var(--main-color);
+}
+input:focus{
+    outline:none;
+}
+
+.submit{
+    margin-top: 10px;
+    width:100%;
+}
+input[type=submit]{
+    width:30%;
+    background-color: var(--main-color);
+    color:white;
+    border:none;
+    padding:10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
