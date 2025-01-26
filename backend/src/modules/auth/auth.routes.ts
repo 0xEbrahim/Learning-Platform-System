@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import validate from "../../utils/zodValidate";
 import {
   activateEmailValidation,
@@ -14,9 +14,12 @@ import {
   register,
   updatePassword,
 } from "./auth.controller";
-import {isAuthenticated} from "../../middlewares/isAuthenticated"
+import { isAuthenticated } from "../../middlewares/isAuthenticated";
 const router = express.Router();
 
+router.get("/", (req: Request, res: Response, next: NextFunction) => {
+  res.json({ message: "Hello" });
+});
 router.post("/register", validate(authValidation), register);
 router.post("/login", validate(loginValidation), login);
 router.get(
@@ -29,6 +32,11 @@ router.patch(
   validate(updatePasswordValidation),
   updatePassword
 );
-router.patch("/confirm-email", isAuthenticated,validate(confirmEmailValidation), confirmEmail);
+router.patch(
+  "/confirm-email",
+  isAuthenticated,
+  validate(confirmEmailValidation),
+  confirmEmail
+);
 
 export const authRouter = router;
