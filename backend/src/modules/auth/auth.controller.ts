@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { asyncHandler } from "../../utils/asyncHandler";
 import { authService } from "./auth.service";
 import ApiError from "../../utils/ApiError";
-import { IActivationBody } from "../../@types/body";
+import config from "../../config/env";
 import { IResponse } from "../../@types/response";
 
 export const register = asyncHandler(
@@ -34,6 +34,26 @@ export const confirmEmail = asyncHandler(
     res.status(200).json({
       status: "Success",
       message: "Please review your email to activate your account",
+    });
+  }
+);
+
+export const login = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const data = await authService.login(req.body);
+    if (!data) return next(new ApiError("Wrong email or password", 401));
+    res.cookie("jwt", data.refreshToken, {
+      expires: new Date(
+        Date.now() + Number(config.JWT_REFRESH_EXPIRES_IN) * 24 * 60 * 60 * 1000
+      ),
+      secure: config.NODE_ENV === "production",
+      httpOnly: true,
+    });
+    res.status(data.statusCode).json({
+      status: data.status,
+      message: data.message,
+      data: data.data,
+      token: data.token,
     });
   }
 );

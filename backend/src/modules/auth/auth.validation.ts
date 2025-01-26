@@ -26,3 +26,10 @@ export const confirmEmailValidation = z.object({
     email: z.string().email("Invalid Email, please try another one"),
   }),
 });
+
+export const loginValidation = z.object({
+  body: z.object({
+    email: z.string().email("Invalid Email, please try another one"),
+    password: z.string(),
+  }),
+});
