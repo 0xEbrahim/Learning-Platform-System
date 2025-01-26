@@ -5,7 +5,6 @@ import ApiError from "../../utils/ApiError";
 
 export const register = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log("SSSS");
     const user = await authService.register(req.body);
     if (!user)
       return next(new ApiError("Error while creating an account", 415));

@@ -3,7 +3,7 @@ import config from "../config/env";
 import ApiError from "../utils/ApiError";
 
 const handleDuplicateDb = (err: any): ApiError => {
-  const values = Object.keys(err.keyValue).join(", ");
+  const values = Object.values(err.keyValue).join(", ");
   const message = `Duplicate values on fields: ${values} , please try again`;
   return new ApiError(message, 409);
 };
