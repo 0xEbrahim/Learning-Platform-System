@@ -26,9 +26,6 @@ const handleExpiredJwtError = (err: any): ApiError => {
 const handleJWTError = (err: any): ApiError => {
   return new ApiError("Invalid Json web token, try again later", 401);
 };
-const sendResponseDev = (res: Response, err: ApiError): void => {};
-
-const sendResponseProd = (res: Response, err: ApiError): void => {};
 
 export const globalErrorHandler = (
   err: any,
