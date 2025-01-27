@@ -35,3 +35,7 @@ export type IResetPassword = {
   password: string;
   confirmPassword: string;
 };
+
+export type IRefresh = {
+  token?: string;
+};

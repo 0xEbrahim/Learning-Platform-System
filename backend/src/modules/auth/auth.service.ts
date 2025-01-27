@@ -6,6 +6,7 @@ import {
   IConfirmTwoStepAuth,
   IForgotPassword,
   ILoginBody,
+  IRefresh,
   IResetPassword,
   IUpdatePasswordBody,
 } from "../../types/body";
@@ -15,10 +16,15 @@ import { generateActivationTemplate } from "../../views/ActivationTemplate";
 import { IUser } from "../users/user.interface";
 import { User } from "../users/user.model";
 import { IResponse } from "../../types/response";
-import { generateRefreshToken, generateToken } from "../../utils/JWT/tokens";
+import {
+  generateRefreshToken,
+  generateToken,
+  verifyRefreshToken,
+} from "../../utils/JWT/tokens";
 import { generateTwoStepTemplate } from "../../views/TwoFATemplate";
 import { Token } from "../../utils/JWT/token.model";
 import { generateForgotPasswordTemplate } from "../../views/forgotPasswordTemplate";
+import { IDecodedPayload } from "../../types/token";
 class AuthService {
   async register(Payload: IUser): Promise<IUser | null> {
     const user = await User.create(Payload);
@@ -293,6 +299,32 @@ class AuthService {
     }
     user.password = password;
     await user.save();
+    return result;
+  }
+
+  async refresh(Payload: IRefresh): Promise<IResponse> {
+    const { token } = Payload;
+    const result: IResponse = {
+      message: "Token refreshed",
+      status: "Success",
+      statusCode: 200,
+    };
+    if (!token) {
+      result.message = "Session timed out, please login again";
+      result.status = "Error";
+      result.statusCode = 401;
+      return result;
+    }
+    const decoded: any = await verifyRefreshToken(token);
+    const user: (Document & IUser) | null = await User.findById(decoded.id);
+    if (!user) {
+      result.message = "Invalid token, please try login again";
+      result.status = "Error";
+      result.statusCode = 400;
+      return result;
+    }
+    const aToken = generateToken(user._id as string);
+    result.token = aToken;
     return result;
   }
 }

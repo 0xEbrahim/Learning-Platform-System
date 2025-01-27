@@ -5,9 +5,9 @@ import ApiError from "../../utils/ApiError";
 import config from "../../config/env";
 import { IResponse } from "../../types/response";
 import { IUserRequset } from "../../interfaces/userRequest";
-import { IUser } from "../users/user.interface";
 import { IConfirmTwoStepAuth } from "../../types/body";
 import { blackListToken } from "../../utils/JWT/tokens";
+import sendResponse from "../../utils/sendResponse";
 
 export const register = asyncHandler(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -23,11 +23,8 @@ export const register = asyncHandler(
 
 export const activateEmail = asyncHandler(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    const result: IResponse = await authService.activateEmail(req.body);
-    res.status(result.statusCode).json({
-      status: result.status,
-      message: result.message,
-    });
+    const data: IResponse = await authService.activateEmail(req.body);
+    sendResponse(res, data);
   }
 );
 
@@ -56,24 +53,14 @@ export const login = asyncHandler(
         httpOnly: true,
       });
     }
-    res.status(data.statusCode).json({
-      status: data.status,
-      message: data.message,
-      data: data.data,
-      token: data.token,
-    });
+    sendResponse(res, data);
   }
 );
 
 export const forgotPassword = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const data = await authService.forgotPassword({ email: req.body.email });
-    res.status(data.statusCode).json({
-      status: data.status,
-      message: data.message,
-      data: data.data,
-      token: data.token,
-    });
+    sendResponse(res, data);
   }
 );
 
@@ -90,12 +77,7 @@ export const twoFA = asyncHandler(
         httpOnly: true,
       });
     }
-    res.status(data.statusCode).json({
-      status: data.status,
-      message: data.message,
-      data: data.data,
-      token: data.token,
-    });
+    sendResponse(res, data);
   }
 );
 
@@ -104,20 +86,14 @@ export const updatePassword = asyncHandler(
     req.body.user = req.user;
     const data = await authService.updatePassword(req.body);
     await blackListToken(req, res, next);
-    res.status(data.statusCode).json({
-      status: data.status,
-      message: data.message,
-    });
+    sendResponse(res, data);
   }
 );
 
 export const activateTwoStepAuth = asyncHandler(
   async (req: IUserRequset, res: Response, next: NextFunction) => {
     const data = await authService.activateTwoStepAuth(req.user as any);
-    res.status(data.statusCode).json({
-      status: data.status,
-      message: data.message,
-    });
+    sendResponse(res, data);
   }
 );
 
@@ -128,10 +104,7 @@ export const confirmTwoStepAuth = asyncHandler(
       otp: req.body.otp,
     };
     const data = await authService.confirmTwoStepAuth(body);
-    res.status(data.statusCode).json({
-      status: data.status,
-      message: data.message,
-    });
+    sendResponse(res, data);
   }
 );
 
@@ -152,9 +125,13 @@ export const resetPassword = asyncHandler(
       password: req.body.password,
       confirmPassword: req.body.confirmPassword,
     });
-    res.status(data.statusCode).json({
-      status: data.status,
-      message: data.message,
-    });
+    sendResponse(res, data);
+  }
+);
+
+export const refresh = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const data = await authService.refresh({ token: req.cookies.jwt });
+    sendResponse(res, data);
   }
 );
