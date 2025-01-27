@@ -32,15 +32,11 @@ router.get(
 
 router.patch(
   "/update-password",
+  isAuthenticated,
   validate(updatePasswordValidation),
   updatePassword
 );
 
-router.patch(
-  "/confirm-email",
-  isAuthenticated,
-  validate(confirmEmailValidation),
-  confirmEmail
-);
+router.patch("/confirm-email", validate(confirmEmailValidation), confirmEmail);
 
 export const authRouter = router;

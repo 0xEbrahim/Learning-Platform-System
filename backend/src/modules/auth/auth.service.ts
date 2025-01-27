@@ -31,6 +31,7 @@ class AuthService {
   async activateEmail(Payload: IActivationBody): Promise<IResponse> {
     const { token } = Payload;
     const encoded = crypto.createHash("sha256").update(token).digest("hex");
+    console.log(encoded);
     const user: (Document & IUser) | null = await User.findOne({
       emailConfirmationToken: encoded,
       emailConfirmationTokenExpires: {
@@ -118,7 +119,7 @@ class AuthService {
       status: "Success",
       statusCode: 200,
     };
-    if (!user.comparePassword(oldPassword)) {
+    if (!(await user.comparePassword(oldPassword))) {
       result.message = "Old password is wrong, please try again";
       result.status = "Error";
       result.statusCode = 401;

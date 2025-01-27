@@ -7,15 +7,21 @@ import { User } from "../modules/users/user.model";
 import { Document } from "mongoose";
 import { IUser } from "../modules/users/user.interface";
 import { Token } from "../utils/JWT/token.model";
+import { IUserRequset } from "../interfaces/userRequest";
 
 export const isAuthenticated = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: IUserRequset, res: Response, next: NextFunction) => {
     let token;
     if (
       !req.headers.authorization ||
       !req.headers.authorization.startsWith("Bearer")
     )
-      return next(new ApiError("Invalid token, please try again later", 400));
+      return next(
+        new ApiError(
+          "You are not logged in or Invalid token, please try again later",
+          400
+        )
+      );
     token = req.headers.authorization.split(" ")[1];
     const blackListed = await Token.findOne({
       token: token,
@@ -33,7 +39,7 @@ export const isAuthenticated = asyncHandler(
           400
         )
       );
-    // req.user = user;
+    req.user = user;
     next();
   }
 );
