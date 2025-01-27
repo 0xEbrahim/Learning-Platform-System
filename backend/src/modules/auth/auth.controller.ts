@@ -66,8 +66,7 @@ export const updatePassword = asyncHandler(
   async (req: IUserRequset, res: Response, next: NextFunction) => {
     req.body.user = req.user;
     const data = await authService.updatePassword(req.body);
-    blackListToken(req, res, next);
-
+    await blackListToken(req, res, next);
     res.status(data.statusCode).json({
       status: data.status,
       message: data.message,
@@ -95,6 +94,16 @@ export const confirmTwoStepAuth = asyncHandler(
     res.status(data.statusCode).json({
       status: data.status,
       message: data.message,
+    });
+  }
+);
+
+export const logout = asyncHandler(
+  async (req: IUserRequset, res: Response, next: NextFunction) => {
+    await blackListToken(req, res, next);
+    res.status(200).json({
+      status: "Success",
+      message: "you logged-out successfully",
     });
   }
 );

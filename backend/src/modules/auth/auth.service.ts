@@ -187,6 +187,7 @@ class AuthService {
     await cUser.save();
     return result;
   }
+
 }
 
 export const authService = new AuthService();

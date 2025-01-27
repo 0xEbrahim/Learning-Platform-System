@@ -14,6 +14,7 @@ import {
   confirmEmail,
   confirmTwoStepAuth,
   login,
+  logout,
   register,
   updatePassword,
 } from "./auth.controller";
@@ -26,7 +27,7 @@ router.get("/", (req: Request, res: Response, next: NextFunction) => {
 
 router.post("/register", validate(authValidation), register);
 router.post("/login", validate(loginValidation), login);
-
+router.post("/logout", isAuthenticated, logout);
 router.get(
   "/activate-account",
   validate(activateEmailValidation),
