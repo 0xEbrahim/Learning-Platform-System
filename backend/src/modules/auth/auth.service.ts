@@ -151,6 +151,7 @@ class AuthService {
     if (config.NODE_ENV === "development")
       link = `${config.DEV_URL}api/v1/auth/confirm-2fa`;
     else link = `${config.PROD_URL}api/v1/auth/confirm-2fa`;
+    console.log(link);
     const template = generateTwoStepTemplate(otp, user.name, link);
     const data = {
       email: user.email,
@@ -187,7 +188,6 @@ class AuthService {
     await cUser.save();
     return result;
   }
-
 }
 
 export const authService = new AuthService();
