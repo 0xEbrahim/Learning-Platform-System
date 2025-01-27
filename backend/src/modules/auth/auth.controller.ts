@@ -66,6 +66,8 @@ export const updatePassword = asyncHandler(
   async (req: IUserRequset, res: Response, next: NextFunction) => {
     req.body.user = req.user;
     const data = await authService.updatePassword(req.body);
+    blackListToken(req, res, next);
+
     res.status(data.statusCode).json({
       status: data.status,
       message: data.message,
@@ -90,7 +92,6 @@ export const confirmTwoStepAuth = asyncHandler(
       otp: req.body.otp,
     };
     const data = await authService.confirmTwoStepAuth(body);
-    blackListToken(req, res, next);
     res.status(data.statusCode).json({
       status: data.status,
       message: data.message,
