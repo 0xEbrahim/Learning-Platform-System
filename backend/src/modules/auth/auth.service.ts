@@ -3,6 +3,7 @@ import { Document } from "mongoose";
 import {
   IActivationBody,
   IConfirmEmail,
+  IConfirmTwoStepAuth,
   ILoginBody,
   IUpdatePasswordBody,
 } from "../../types/body";
@@ -156,6 +157,33 @@ class AuthService {
       template,
     };
     await sendEmail(data);
+    return result;
+  }
+
+  async confirmTwoStepAuth(Payload: IConfirmTwoStepAuth): Promise<IResponse> {
+    const { user, otp } = Payload;
+    const result: IResponse = {
+      message: "2FA activated successfully",
+      statusCode: 200,
+      status: "Success",
+    };
+    const cUser = await User.findOne({
+      OTP: otp,
+      OTPExpires: {
+        $gt: Date.now(),
+      },
+    });
+    if (!cUser) {
+      result.message =
+        "Invalid or expired OTP code, please try again with another one.";
+      result.status = "Fail";
+      result.statusCode = 400;
+      return result;
+    }
+    cUser.twoStepAuth = true;
+    cUser.OTP = undefined;
+    cUser.OTPExpires = undefined;
+    await cUser.save();
     return result;
   }
 }

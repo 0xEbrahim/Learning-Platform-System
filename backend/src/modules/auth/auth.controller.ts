@@ -6,6 +6,7 @@ import config from "../../config/env";
 import { IResponse } from "../../types/response";
 import { IUserRequset } from "../../interfaces/userRequest";
 import { IUser } from "../users/user.interface";
+import { IConfirmTwoStepAuth } from "../../types/body";
 
 export const register = asyncHandler(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -74,6 +75,20 @@ export const updatePassword = asyncHandler(
 export const activateTwoStepAuth = asyncHandler(
   async (req: IUserRequset, res: Response, next: NextFunction) => {
     const data = await authService.activateTwoStepAuth(req.user as any);
+    res.status(data.statusCode).json({
+      status: data.status,
+      message: data.message,
+    });
+  }
+);
+
+export const confirmTwoStepAuth = asyncHandler(
+  async (req: IUserRequset, res: Response, next: NextFunction) => {
+    const body: IConfirmTwoStepAuth = {
+      user: req.user as any,
+      otp: req.body.otp,
+    };
+    const data = await authService.confirmTwoStepAuth(body);
     res.status(data.statusCode).json({
       status: data.status,
       message: data.message,
