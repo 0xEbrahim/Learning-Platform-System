@@ -16,6 +16,7 @@ import {
   login,
   logout,
   register,
+  twoFA,
   updatePassword,
 } from "./auth.controller";
 import { isAuthenticated } from "../../middlewares/isAuthenticated";
@@ -33,7 +34,7 @@ router.get(
   validate(activateEmailValidation),
   activateEmail
 );
-
+router.get("/2fa", validate(confirmTwoStepAuthValidation), twoFA);
 router.patch(
   "/update-password",
   isAuthenticated,
@@ -43,8 +44,8 @@ router.patch(
 router.patch("/activate-2fa", isAuthenticated, activateTwoStepAuth);
 router.get(
   "/confirm-2fa",
-  validate(confirmTwoStepAuthValidation),
   isAuthenticated,
+  validate(confirmTwoStepAuthValidation),
   confirmTwoStepAuth
 );
 router.patch("/confirm-email", validate(confirmEmailValidation), confirmEmail);

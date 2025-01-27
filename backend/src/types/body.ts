@@ -22,6 +22,6 @@ export type IUpdatePasswordBody = {
 };
 
 export type IConfirmTwoStepAuth = {
-  user: Document & IUser;
+  user?: Document & IUser;
   otp: string;
 };

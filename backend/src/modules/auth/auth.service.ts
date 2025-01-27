@@ -92,9 +92,6 @@ class AuthService {
       message: "Logged-in successfully",
       status: "Success",
       statusCode: 200,
-      data: "",
-      token: "",
-      refreshToken: "",
     };
     if (!user || !(await user.comparePassword(password))) {
       return null;
@@ -104,9 +101,25 @@ class AuthService {
         "Cannot login before confirming your email, please confirm it and try again.";
       result.status = "error";
       result.statusCode = 409;
-      result.data = undefined;
-      result.token = undefined;
-      result.refreshToken = undefined;
+      return result;
+    }
+    if (user.twoStepAuth) {
+      const otp = await user.generateOTP();
+      await user.save();
+      let link;
+      if (config.NODE_ENV === "development")
+        link = `${config.DEV_URL}api/v1/auth/2fa`;
+      else link = `${config.PROD_URL}api/v1/auth/2fa`;
+      const template = generateTwoStepTemplate(otp, user.name, link);
+      const data = {
+        email: user.email,
+        subject: "2FA Code",
+        template,
+      };
+      await sendEmail(data);
+      result.message = "OTP sent, please check your email";
+      result.status = "Success";
+      result.statusCode = 200;
       return result;
     }
     user.password = undefined;
@@ -170,7 +183,6 @@ class AuthService {
       status: "Success",
     };
     const decoded = crypto.createHash("sha256").update(otp).digest("hex");
-    console.log(decoded);
     const cUser = await User.findOne({
       OTP: decoded,
       OTPExpires: {
@@ -188,6 +200,41 @@ class AuthService {
     cUser.OTP = undefined;
     cUser.OTPExpires = undefined;
     await cUser.save();
+    return result;
+  }
+
+  async twoFA(Payload: IConfirmTwoStepAuth): Promise<IResponse> {
+    const result: IResponse = {
+      message: "Logged-In successfully",
+      status: "Success",
+      statusCode: 200,
+    };
+    const { otp } = Payload;
+    const decoded = crypto.createHash("sha256").update(otp).digest("hex");
+    const user = await User.findOne({
+      OTP: decoded,
+      OTPExpires: {
+        $gt: Date.now(),
+      },
+    });
+    if (!user) {
+      result.message =
+        "Invalid or expired OTP code, please try again with another one.";
+      result.status = "Fail";
+      result.statusCode = 400;
+      return result;
+    }
+    
+    const token = generateToken(user._id as string);
+    const refreshToken = generateRefreshToken(user._id as string);
+    result.token = token;
+    result.refreshToken = refreshToken;
+    user.twoStepAuth = true;
+    user.OTP = undefined;
+    user.OTPExpires = undefined;
+    await user.save();
+    user.password = undefined;
+    result.data = user;
     return result;
   }
 }

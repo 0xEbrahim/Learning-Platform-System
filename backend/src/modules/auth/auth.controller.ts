@@ -46,13 +46,16 @@ export const login = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const data = await authService.login(req.body);
     if (!data) return next(new ApiError("Wrong email or password", 401));
-    res.cookie("jwt", data.refreshToken, {
-      expires: new Date(
-        Date.now() + Number(config.JWT_REFRESH_EXPIRES_IN) * 24 * 60 * 60 * 1000
-      ),
-      secure: config.NODE_ENV === "production",
-      httpOnly: true,
-    });
+    if (data.message === "Logged-in successfully") {
+      res.cookie("jwt", data.refreshToken, {
+        expires: new Date(
+          Date.now() +
+            Number(config.JWT_REFRESH_EXPIRES_IN) * 24 * 60 * 60 * 1000
+        ),
+        secure: config.NODE_ENV === "production",
+        httpOnly: true,
+      });
+    }
     res.status(data.statusCode).json({
       status: data.status,
       message: data.message,
@@ -61,6 +64,26 @@ export const login = asyncHandler(
     });
   }
 );
+
+export const twoFA = asyncHandler(async(req: Request, res: Response, next: NextFunction) => {
+  const data = await authService.twoFA({otp: req.body.otp})
+  if (data.message === "Logged-in successfully") {
+    res.cookie("jwt", data.refreshToken, {
+      expires: new Date(
+        Date.now() +
+          Number(config.JWT_REFRESH_EXPIRES_IN) * 24 * 60 * 60 * 1000
+      ),
+      secure: config.NODE_ENV === "production",
+      httpOnly: true,
+    });
+  }
+  res.status(data.statusCode).json({
+    status: data.status,
+    message: data.message,
+    data: data.data,
+    token: data.token,
+  });
+})
 
 export const updatePassword = asyncHandler(
   async (req: IUserRequset, res: Response, next: NextFunction) => {
