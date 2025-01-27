@@ -149,8 +149,8 @@ class AuthService {
     await user.save();
     let link;
     if (config.NODE_ENV === "development")
-      link = `${config.DEV_URL}api/v1/auth/activate-2fa`;
-    else link = `${config.PROD_URL}api/v1/auth/activate-2fa`;
+      link = `${config.DEV_URL}api/v1/auth/confirm-2fa`;
+    else link = `${config.PROD_URL}api/v1/auth/confirm-2fa`;
     const template = generateTwoStepTemplate(otp, user.name, link);
     const data = {
       email: user.email,
