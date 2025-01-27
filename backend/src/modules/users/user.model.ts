@@ -1,6 +1,7 @@
 import mongoose, { Model, Schema } from "mongoose";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
+import otpGen from "otp-generator";
 import { IUser } from "./user.interface";
 import { roles } from "../../enums/roles";
 
@@ -84,8 +85,18 @@ userSchema.methods.generateEmailConfirmationToken = function (): string {
   const token = crypto.randomBytes(64).toString("hex");
   const encoded = crypto.createHash("sha256").update(token).digest("hex");
   this.emailConfirmationToken = encoded;
-  this.emailConfirmationTokenExpires = Date.now() + 10 * 60 * 1000;
+  this.emailConfirmationTokenExpires = new Date(Date.now() + 10 * 60 * 1000);
   return token;
+};
+
+userSchema.methods.generateOTP = function (): string {
+  const otp = otpGen.generate(6, {
+    digits: true,
+  });
+  const decoded = crypto.createHash("sha256").update(otp).digest("hex");
+  this.OTP = decoded;
+  this.OTPExpires = new Date(Date.now() + 10 * 60 * 1000);
+  return otp;
 };
 
 export const User: Model<IUser> = mongoose.model<IUser>("User", userSchema);

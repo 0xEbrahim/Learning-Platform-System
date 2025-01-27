@@ -9,6 +9,7 @@ import {
 } from "./auth.validation";
 import {
   activateEmail,
+  activateTwoStepAuth,
   confirmEmail,
   login,
   register,
@@ -36,7 +37,7 @@ router.patch(
   validate(updatePasswordValidation),
   updatePassword
 );
-
+router.patch("/activate-2fa", isAuthenticated, activateTwoStepAuth);
 router.patch("/confirm-email", validate(confirmEmailValidation), confirmEmail);
 
 export const authRouter = router;

@@ -22,4 +22,5 @@ export interface IUser {
   OTPExpires?: Date;
   comparePassword: (password: string) => Promise<Boolean>;
   generateEmailConfirmationToken: () => string;
+  generateOTP: () => string;
 }

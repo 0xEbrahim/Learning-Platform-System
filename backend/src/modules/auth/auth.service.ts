@@ -6,12 +6,14 @@ import {
   ILoginBody,
   IUpdatePasswordBody,
 } from "../../types/body";
+import config from "../../config/env";
 import sendEmail from "../../config/email";
 import { generateActivationTemplate } from "../../views/ActivationTemplate";
 import { IUser } from "../users/user.interface";
 import { User } from "../users/user.model";
 import { IResponse } from "../../types/response";
 import { generateRefreshToken, generateToken } from "../../utils/JWT/tokens";
+import { generateTwoStepTemplate } from "../../views/TwoFATemplate";
 class AuthService {
   async register(Payload: IUser): Promise<IUser | null> {
     const user = await User.create(Payload);
@@ -65,7 +67,10 @@ class AuthService {
     if (!user) return null;
     const token = user.generateEmailConfirmationToken();
     await user.save();
-    const link = `http://localhost:3000/api/v1/auth/activate-account/`;
+    let link;
+    if (config.NODE_ENV === "development")
+      link = `${config.DEV_URL}api/v1/auth/activate-account`;
+    else link = `${config.PROD_URL}api/v1/auth/activate-account`;
     const template = generateActivationTemplate(token, user.name, link);
     const data = {
       email: user.email,
@@ -128,6 +133,29 @@ class AuthService {
     user.password = password;
     user.passwordChangedAt = new Date(Date.now());
     await user.save();
+    return result;
+  }
+
+  async activateTwoStepAuth(Payload: Document & IUser): Promise<IResponse> {
+    const result: IResponse = {
+      message: "We sent you a OTP, please check your email to activate 2FA",
+      status: "Success",
+      statusCode: 200,
+    };
+    const user = Payload;
+    const otp: string = user.generateOTP();
+    await user.save();
+    let link;
+    if (config.NODE_ENV === "development")
+      link = `${config.DEV_URL}api/v1/auth/activate-2fa`;
+    else link = `${config.PROD_URL}api/v1/auth/activate-2fa`;
+    const template = generateTwoStepTemplate(otp, user.name, link);
+    const data = {
+      email: user.email,
+      subject: "2FA activation",
+      template,
+    };
+    await sendEmail(data);
     return result;
   }
 }

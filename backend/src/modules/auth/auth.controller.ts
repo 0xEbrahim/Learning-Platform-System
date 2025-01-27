@@ -5,6 +5,7 @@ import ApiError from "../../utils/ApiError";
 import config from "../../config/env";
 import { IResponse } from "../../types/response";
 import { IUserRequset } from "../../interfaces/userRequest";
+import { IUser } from "../users/user.interface";
 
 export const register = asyncHandler(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -63,6 +64,16 @@ export const updatePassword = asyncHandler(
   async (req: IUserRequset, res: Response, next: NextFunction) => {
     req.body.user = req.user;
     const data = await authService.updatePassword(req.body);
+    res.status(data.statusCode).json({
+      status: data.status,
+      message: data.message,
+    });
+  }
+);
+
+export const activateTwoStepAuth = asyncHandler(
+  async (req: IUserRequset, res: Response, next: NextFunction) => {
+    const data = await authService.activateTwoStepAuth(req.user as any);
     res.status(data.statusCode).json({
       status: data.status,
       message: data.message,
