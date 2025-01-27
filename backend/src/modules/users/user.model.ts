@@ -99,4 +99,12 @@ userSchema.methods.generateOTP = function (): string {
   return otp;
 };
 
+userSchema.methods.generatePasswordResetToken = function (): string {
+  const token = crypto.randomBytes(64).toString("hex");
+  const encoded = crypto.createHash("sha256").update(token).digest("hex");
+  this.passwordResetToken = encoded;
+  this.passwordResetTokenExpires = new Date(Date.now() + 10 * 60 * 1000);
+  return token;
+};
+
 export const User: Model<IUser> = mongoose.model<IUser>("User", userSchema);

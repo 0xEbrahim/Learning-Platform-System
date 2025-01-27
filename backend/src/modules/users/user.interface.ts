@@ -23,4 +23,5 @@ export interface IUser {
   comparePassword: (password: string) => Promise<Boolean>;
   generateEmailConfirmationToken: () => string;
   generateOTP: () => string;
+  generatePasswordResetToken: () => string;
 }

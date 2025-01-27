@@ -25,3 +25,7 @@ export type IConfirmTwoStepAuth = {
   user?: Document & IUser;
   otp: string;
 };
+
+export type IForgotPassword = {
+  email: string
+}

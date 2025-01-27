@@ -4,6 +4,7 @@ import {
   IActivationBody,
   IConfirmEmail,
   IConfirmTwoStepAuth,
+  IForgotPassword,
   ILoginBody,
   IUpdatePasswordBody,
 } from "../../types/body";
@@ -16,6 +17,7 @@ import { IResponse } from "../../types/response";
 import { generateRefreshToken, generateToken } from "../../utils/JWT/tokens";
 import { generateTwoStepTemplate } from "../../views/TwoFATemplate";
 import { Token } from "../../utils/JWT/token.model";
+import { generateForgotPasswordTemplate } from "../../views/forgotPasswordTemplate";
 class AuthService {
   async register(Payload: IUser): Promise<IUser | null> {
     const user = await User.create(Payload);
@@ -203,6 +205,36 @@ class AuthService {
     return result;
   }
 
+  async forgotPassword(Payload: IForgotPassword): Promise<IResponse> {
+    const { email } = Payload;
+    const user = await User.findOne({ email: email });
+    const result: IResponse = {
+      message: "We sent password reset link, check your email",
+      status: "Success",
+      statusCode: 200,
+    };
+    if (!user) {
+      result.message = "Email is not exist";
+      result.status = "Error";
+      result.statusCode = 400;
+      return result;
+    }
+    const token = user.generatePasswordResetToken();
+    await user.save();
+    let link;
+    if (config.NODE_ENV === "development")
+      link = `${config.DEV_URL}api/v1/auth/reset-password?token=${token}`;
+    else link = `${config.PROD_URL}api/v1/auth/reset-password?token=${token}`;
+    const template = generateForgotPasswordTemplate(user.name, link);
+    const data = {
+      email: user.email,
+      subject: "Password reset",
+      template,
+    };
+    await sendEmail(data);
+    return result;
+  }
+
   async twoFA(Payload: IConfirmTwoStepAuth): Promise<IResponse> {
     const result: IResponse = {
       message: "Logged-In successfully",
@@ -224,7 +256,7 @@ class AuthService {
       result.statusCode = 400;
       return result;
     }
-    
+
     const token = generateToken(user._id as string);
     const refreshToken = generateRefreshToken(user._id as string);
     result.token = token;
