@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 import dotenv from "dotenv";
 import morgan from "morgan";
 import cors from "cors";
+import { rateLimit } from "express-rate-limit";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
 dotenv.config();
@@ -9,8 +10,15 @@ import config from "./config/env";
 import { authRouter } from "./modules/auth/auth.routes";
 import { globalErrorHandler } from "./middlewares/error";
 const app = express();
+const limiter = rateLimit({
+  windowMs: 10 * 60 * 1000,
+  limit: 100,
+  standardHeaders: "draft-8",
+});
+app.use(limiter);
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true }));
+
 app.use(cors());
 app.use(helmet());
 app.use(cookieParser());
