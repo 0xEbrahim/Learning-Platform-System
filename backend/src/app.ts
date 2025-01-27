@@ -16,6 +16,12 @@ app.use(helmet());
 app.use(cookieParser());
 app.use(config.NODE_ENV === "production" ? morgan("combined") : morgan("dev"));
 
+app.get("/", (req: Request, res: Response, next: NextFunction) => {
+  res.json({
+    status: "Success",
+    message: "Learner system is up to work",
+  });
+});
 app.use("/api/v1/auth", authRouter);
 app.use(globalErrorHandler);
 app.all("*", (req: Request, res: Response, next: NextFunction) => {
