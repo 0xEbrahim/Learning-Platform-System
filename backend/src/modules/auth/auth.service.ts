@@ -15,6 +15,7 @@ import { User } from "../users/user.model";
 import { IResponse } from "../../types/response";
 import { generateRefreshToken, generateToken } from "../../utils/JWT/tokens";
 import { generateTwoStepTemplate } from "../../views/TwoFATemplate";
+import { Token } from "../../utils/JWT/token.model";
 class AuthService {
   async register(Payload: IUser): Promise<IUser | null> {
     const user = await User.create(Payload);

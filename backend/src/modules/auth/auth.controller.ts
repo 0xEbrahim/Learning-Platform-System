@@ -7,6 +7,7 @@ import { IResponse } from "../../types/response";
 import { IUserRequset } from "../../interfaces/userRequest";
 import { IUser } from "../users/user.interface";
 import { IConfirmTwoStepAuth } from "../../types/body";
+import { blackListToken } from "../../utils/JWT/tokens";
 
 export const register = asyncHandler(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -89,6 +90,7 @@ export const confirmTwoStepAuth = asyncHandler(
       otp: req.body.otp,
     };
     const data = await authService.confirmTwoStepAuth(body);
+    blackListToken(req, res, next);
     res.status(data.statusCode).json({
       status: data.status,
       message: data.message,
