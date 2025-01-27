@@ -18,6 +18,7 @@ import {
   forgotPassword,
   login,
   logout,
+  refresh,
   register,
   resetPassword,
   twoFA,
@@ -43,6 +44,7 @@ router.patch(
   validate(forgotPasswordValidation),
   forgotPassword
 );
+router.get("/refresh", refresh);
 router.get("/reset-password", validate(resetPasswordValidation), resetPassword);
 router.get("/2fa", validate(confirmTwoStepAuthValidation), twoFA);
 router.patch(

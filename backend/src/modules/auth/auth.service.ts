@@ -30,7 +30,10 @@ class AuthService {
     const user = await User.create(Payload);
     const token = user.generateEmailConfirmationToken();
     await user.save();
-    const link = `http://localhost:3000/api/v1/auth/activate-account/`;
+    let link;
+    if (config.NODE_ENV === "development")
+      link = `${config.DEV_URL}api/v1/auth/activate-account`;
+    else link = `${config.PROD_URL}api/v1/auth/activate-account`;
     const template = generateActivationTemplate(token, user.name, link);
     const data = {
       email: user.email,
