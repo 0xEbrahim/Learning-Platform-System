@@ -169,8 +169,10 @@ class AuthService {
       statusCode: 200,
       status: "Success",
     };
+    const decoded = crypto.createHash("sha256").update(otp).digest("hex");
+    console.log(decoded);
     const cUser = await User.findOne({
-      OTP: otp,
+      OTP: decoded,
       OTPExpires: {
         $gt: Date.now(),
       },
