@@ -6,6 +6,7 @@ import {
   IConfirmTwoStepAuth,
   IForgotPassword,
   ILoginBody,
+  IResetPassword,
   IUpdatePasswordBody,
 } from "../../types/body";
 import config from "../../config/env";
@@ -267,6 +268,31 @@ class AuthService {
     await user.save();
     user.password = undefined;
     result.data = user;
+    return result;
+  }
+
+  async resetPassword(Payload: IResetPassword): Promise<IResponse> {
+    const result: IResponse = {
+      message: "Password reset successfully",
+      status: "Success",
+      statusCode: 200,
+    };
+    const { token, password } = Payload;
+    const decoded = crypto.createHash("sha256").update(token).digest("hex");
+    const user = await User.findOne({
+      passwordResetToken: decoded,
+      passwordResetTokenExpires: {
+        $gt: Date.now(),
+      },
+    });
+    if (!user) {
+      result.message = "Invalid or expired token, try again with another token";
+      result.status = "Fail";
+      result.statusCode = 400;
+      return result;
+    }
+    user.password = password;
+    await user.save();
     return result;
   }
 }

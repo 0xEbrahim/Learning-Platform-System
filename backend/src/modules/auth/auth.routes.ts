@@ -7,6 +7,7 @@ import {
   confirmTwoStepAuthValidation,
   forgotPasswordValidation,
   loginValidation,
+  resetPasswordValidation,
   updatePasswordValidation,
 } from "./auth.validation";
 import {
@@ -18,6 +19,7 @@ import {
   login,
   logout,
   register,
+  resetPassword,
   twoFA,
   updatePassword,
 } from "./auth.controller";
@@ -41,6 +43,7 @@ router.patch(
   validate(forgotPasswordValidation),
   forgotPassword
 );
+router.get("/reset-password", validate(resetPasswordValidation), resetPassword);
 router.get("/2fa", validate(confirmTwoStepAuthValidation), twoFA);
 router.patch(
   "/update-password",

@@ -144,3 +144,17 @@ export const logout = asyncHandler(
     });
   }
 );
+
+export const resetPassword = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const data = await authService.resetPassword({
+      token: req.query.token as any,
+      password: req.body.password,
+      confirmPassword: req.body.confirmPassword,
+    });
+    res.status(data.statusCode).json({
+      status: data.status,
+      message: data.message,
+    });
+  }
+);

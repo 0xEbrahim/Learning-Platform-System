@@ -27,5 +27,11 @@ export type IConfirmTwoStepAuth = {
 };
 
 export type IForgotPassword = {
-  email: string
-}
+  email: string;
+};
+
+export type IResetPassword = {
+  token: string;
+  password: string;
+  confirmPassword: string;
+};

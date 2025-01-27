@@ -64,3 +64,24 @@ export const forgotPasswordValidation = z.object({
     email: z.string(),
   }),
 });
+
+export const resetPasswordValidation = z.object({
+  query: z.object({
+    token: z.string(),
+  }),
+  body: z
+    .object({
+      password: z
+        .string()
+        .min(6, "Password cannot be less than 6 characters")
+        .max(16, "Password cannot be more than 16 characters"),
+      confirmPassword: z
+        .string()
+        .min(6, "Password cannot be less than 6 characters")
+        .max(16, "Password cannot be more than 16 characters"),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: "Passwords doesn't match",
+      path: ["Password confirmation"],
+    }),
+});
