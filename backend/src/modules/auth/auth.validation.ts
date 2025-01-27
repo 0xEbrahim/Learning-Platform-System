@@ -38,15 +38,23 @@ export const updatePasswordValidation = z.object({
   body: z
     .object({
       oldPassword: z.string(),
-      password: z.string()
-      .min(6, "Password cannot be less than 6 characters")
-      .max(16, "Password cannot be more than 16 characters"),
-      confirmPassword: z.string()
-      .min(6, "Password cannot be less than 6 characters")
-      .max(16, "Password cannot be more than 16 characters"),
+      password: z
+        .string()
+        .min(6, "Password cannot be less than 6 characters")
+        .max(16, "Password cannot be more than 16 characters"),
+      confirmPassword: z
+        .string()
+        .min(6, "Password cannot be less than 6 characters")
+        .max(16, "Password cannot be more than 16 characters"),
     })
     .refine((data) => data.password === data.confirmPassword, {
       message: "Passwords doesn't match",
       path: ["Password confirmation"],
     }),
+});
+
+export const confirmTwoStepAuthValidation = z.object({
+  body: z.object({
+    otp: z.string(),
+  }),
 });

@@ -4,6 +4,7 @@ import {
   activateEmailValidation,
   authValidation,
   confirmEmailValidation,
+  confirmTwoStepAuthValidation,
   loginValidation,
   updatePasswordValidation,
 } from "./auth.validation";
@@ -11,6 +12,7 @@ import {
   activateEmail,
   activateTwoStepAuth,
   confirmEmail,
+  confirmTwoStepAuth,
   login,
   register,
   updatePassword,
@@ -38,6 +40,12 @@ router.patch(
   updatePassword
 );
 router.patch("/activate-2fa", isAuthenticated, activateTwoStepAuth);
+router.get(
+  "/confirm-2fa",
+  validate(confirmTwoStepAuthValidation),
+  isAuthenticated,
+  confirmTwoStepAuth
+);
 router.patch("/confirm-email", validate(confirmEmailValidation), confirmEmail);
 
 export const authRouter = router;
