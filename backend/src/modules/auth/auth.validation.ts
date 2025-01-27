@@ -58,3 +58,9 @@ export const confirmTwoStepAuthValidation = z.object({
     otp: z.string(),
   }),
 });
+
+export const forgotPasswordValidation = z.object({
+  body: z.object({
+    email: z.string(),
+  }),
+});

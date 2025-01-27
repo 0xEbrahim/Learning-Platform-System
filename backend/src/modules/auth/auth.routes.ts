@@ -5,6 +5,7 @@ import {
   authValidation,
   confirmEmailValidation,
   confirmTwoStepAuthValidation,
+  forgotPasswordValidation,
   loginValidation,
   updatePasswordValidation,
 } from "./auth.validation";
@@ -13,6 +14,7 @@ import {
   activateTwoStepAuth,
   confirmEmail,
   confirmTwoStepAuth,
+  forgotPassword,
   login,
   logout,
   register,
@@ -33,6 +35,11 @@ router.get(
   "/activate-account",
   validate(activateEmailValidation),
   activateEmail
+);
+router.patch(
+  "/forgot-password",
+  validate(forgotPasswordValidation),
+  forgotPassword
 );
 router.get("/2fa", validate(confirmTwoStepAuthValidation), twoFA);
 router.patch(

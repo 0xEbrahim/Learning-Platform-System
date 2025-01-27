@@ -65,9 +65,17 @@ export const login = asyncHandler(
   }
 );
 
-export const forgotPassword = asyncHandler(async(req: Request, res: Response, next: NextFunction) => {
-  
-})
+export const forgotPassword = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const data = await authService.forgotPassword({ email: req.body.email });
+    res.status(data.statusCode).json({
+      status: data.status,
+      message: data.message,
+      data: data.data,
+      token: data.token,
+    });
+  }
+);
 
 export const twoFA = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
