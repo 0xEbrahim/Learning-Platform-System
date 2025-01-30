@@ -9,7 +9,6 @@ dotenv.config();
 import config from "./config/env";
 import { authRouter } from "./modules/auth/auth.routes";
 import { globalErrorHandler } from "./middlewares/error";
-import swaggeDocs from "./utils/swagger";
 const app = express();
 const limiter = rateLimit({
   windowMs: 10 * 60 * 1000,
@@ -33,7 +32,6 @@ app.get("/", (req: Request, res: Response, next: NextFunction) => {
 });
 
 app.use("/api/v1/auth", authRouter);
-swaggeDocs(app, 3000);
 app.use(globalErrorHandler);
 
 app.all("*", (req: Request, res: Response, next: NextFunction) => {
