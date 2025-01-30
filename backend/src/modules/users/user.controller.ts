@@ -2,8 +2,9 @@ import { NextFunction, Request, Response } from "express";
 import { asyncHandler } from "../../utils/asyncHandler";
 import { IUserRequset } from "../../interfaces/userRequest";
 import { userService } from "./user.service";
-import { IUser } from "./user.interface";
 import ApiError from "../../utils/ApiError";
+import { IUpdateUserInfo } from "../../types/body";
+import { blackListToken } from "../../utils/JWT/tokens";
 
 export const getUserInfo = asyncHandler(
   async (req: IUserRequset, res: Response, next: NextFunction) => {
@@ -36,3 +37,24 @@ export const getUserById = asyncHandler(
     });
   }
 );
+
+export const updateUserInfo = asyncHandler(
+  async (req: IUserRequset, res: Response, next: NextFunction) => {
+    const body: IUpdateUserInfo = {
+      id: req.user?._id,
+      name: req.body.name,
+      email: req.body.email,
+    };
+    const user = await userService.updateUserInfo(body);
+    if (!user) return next(new ApiError("Can't update this user at time", 500));
+    blackListToken(req, res, next);
+    res.status(200).json({
+      status: "Success",
+      message: "User updated successfully, logIn again",
+    });
+  }
+);
+
+export const updateProfilePicture = asyncHandler(async(req: Request, res: Response, next: NextFunction) => {
+    
+})

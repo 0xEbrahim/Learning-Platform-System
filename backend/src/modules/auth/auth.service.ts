@@ -22,9 +22,7 @@ import {
   verifyRefreshToken,
 } from "../../utils/JWT/tokens";
 import { generateTwoStepTemplate } from "../../views/TwoFATemplate";
-import { Token } from "../../utils/JWT/token.model";
 import { generateForgotPasswordTemplate } from "../../views/forgotPasswordTemplate";
-import { IDecodedPayload } from "../../types/token";
 class AuthService {
   async register(Payload: IUser): Promise<IUser | null> {
     const user = await User.create(Payload);

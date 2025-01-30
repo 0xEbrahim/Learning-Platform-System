@@ -39,3 +39,9 @@ export type IResetPassword = {
 export type IRefresh = {
   token?: string;
 };
+
+export type IUpdateUserInfo = {
+  id?: string;
+  name?: string;
+  email?: string;
+};

@@ -44,7 +44,12 @@ const userSchema: Schema<IUser> = new Schema<IUser>(
       type: Date,
     },
     avatar: {
-      type: String,
+      public_id: {
+        type: String,
+      },
+      url: {
+        type: String,
+      },
     },
     role: {
       type: String,
@@ -70,6 +75,10 @@ const userSchema: Schema<IUser> = new Schema<IUser>(
 );
 
 userSchema.pre("save", function (next) {
+  if (this.isModified("email")) {
+    this.email_confirmed = false;
+    this.twoStepAuth = false;
+  }
   if (!this.isModified("password")) return next();
   this.password = bcrypt.hashSync(this.password as string, 12);
   this.passwordChangedAt = new Date(Date.now());
