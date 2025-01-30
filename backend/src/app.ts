@@ -10,6 +10,7 @@ import config from "./config/env";
 import { authRouter } from "./modules/auth/auth.routes";
 import { globalErrorHandler } from "./middlewares/error";
 import { userRouter } from "./modules/users/user.routes";
+import { courseRouter } from "./modules/courses/course.routes";
 const app = express();
 const limiter = rateLimit({
   windowMs: 10 * 60 * 1000,
@@ -34,6 +35,7 @@ app.get("/", (req: Request, res: Response, next: NextFunction) => {
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/courses", courseRouter);
 app.use(globalErrorHandler);
 
 app.all("*", (req: Request, res: Response, next: NextFunction) => {
