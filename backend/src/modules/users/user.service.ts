@@ -7,6 +7,7 @@ import ApiError from "../../utils/ApiError";
 import { generateActivationTemplate } from "../../views/ActivationTemplate";
 import sendEmail from "../../config/email";
 import cloudinary from "../../config/cloudinary";
+import { UploadApiResponse } from "cloudinary";
 class UserService {
   async getUserById(id: string): Promise<(Document & IUser) | null> {
     const user: (Document & IUser) | null = await User.findById(id);
@@ -44,14 +45,23 @@ class UserService {
     const { id, path } = Payload;
     const user = await User.findById(id as string);
     if (!user) throw new ApiError("User not found", 404);
-    const uplaoded = await cloudinary.uploader.upload(path as string, {
-      folder: "users",
-    });
+
+    // If user have a profile picture, so delete it
+    if (user.avatar?.public_id) {
+      await cloudinary.uploader.destroy(user.avatar?.public_id);
+    }
+    const uplaoded: UploadApiResponse = await cloudinary.uploader.upload(
+      path as string,
+      {
+        folder: "users",
+      }
+    );
     user.avatar = {
       public_id: uplaoded.public_id,
       url: uplaoded.secure_url,
     };
     await user.save();
+    user.password = undefined;
     return user;
   }
 }
