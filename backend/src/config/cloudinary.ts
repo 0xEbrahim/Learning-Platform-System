@@ -1,4 +1,4 @@
-import { v2 as cloudinary, UploadApiResponse } from "cloudinary";
+import { v2 as cloudinary } from "cloudinary";
 import config from "../config/env";
 
 cloudinary.config({
@@ -7,16 +7,4 @@ cloudinary.config({
   api_secret: config.CLOUD_API_SECRETS,
 });
 
-export default async function (
-  path: string,
-  folder: string
-): Promise<void | UploadApiResponse> {
-  const uploadResult = await cloudinary.uploader
-    .upload(path, {
-      folder,
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-  uploadResult;
-}
+export default cloudinary

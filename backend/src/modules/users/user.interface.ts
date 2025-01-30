@@ -8,7 +8,10 @@ export interface IUser {
   password?: string;
   passwordChangedAt?: Date;
   role: roles;
-  avatar?: string;
+  avatar?: {
+    public_id: string;
+    url: string;
+  };
   active: boolean;
   email_confirmed: boolean;
   createdAt?: Date;

@@ -45,3 +45,8 @@ export type IUpdateUserInfo = {
   name?: string;
   email?: string;
 };
+
+export type IUpdateProfilePic = {
+  id?: string;
+  path?: string;
+};

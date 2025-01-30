@@ -55,7 +55,20 @@ export const updateUserInfo = asyncHandler(
   }
 );
 
-export const updateProfilePicture = asyncHandler(async(req: Request, res: Response, next: NextFunction) => {
-    console.log(req.file)
-    res.json({})
-})
+export const updateProfilePicture = asyncHandler(
+  async (req: IUserRequset, res: Response, next: NextFunction) => {
+    const path = req.file?.path;
+    const userId = req.user?._id;
+    const user = await userService.updateProfilePic({
+      id: userId as string,
+      path,
+    });
+    if (!user)
+      return next(new ApiError("Error while updating the profile pic", 500));
+    res.status(200).json({
+      status: "Success",
+      message: "Profile picture updated successfully",
+      data: { user },
+    });
+  }
+);

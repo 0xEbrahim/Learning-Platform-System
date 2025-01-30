@@ -1,12 +1,12 @@
 import { Document } from "mongoose";
 import { User } from "./user.model";
 import { IUser } from "./user.interface";
-import { IUpdateUserInfo } from "../../types/body";
+import { IUpdateProfilePic, IUpdateUserInfo } from "../../types/body";
 import config from "../../config/env";
 import ApiError from "../../utils/ApiError";
 import { generateActivationTemplate } from "../../views/ActivationTemplate";
 import sendEmail from "../../config/email";
-
+import cloudinary from "../../config/cloudinary";
 class UserService {
   async getUserById(id: string): Promise<(Document & IUser) | null> {
     const user: (Document & IUser) | null = await User.findById(id);
@@ -40,7 +40,20 @@ class UserService {
     return user;
   }
 
-  async updateProfilePic(){}
+  async updateProfilePic(Payload: IUpdateProfilePic) {
+    const { id, path } = Payload;
+    const user = await User.findById(id as string);
+    if (!user) throw new ApiError("User not found", 404);
+    const uplaoded = await cloudinary.uploader.upload(path as string, {
+      folder: "users",
+    });
+    user.avatar = {
+      public_id: uplaoded.public_id,
+      url: uplaoded.secure_url,
+    };
+    await user.save();
+    return user;
+  }
 }
 
 export const userService = new UserService();
