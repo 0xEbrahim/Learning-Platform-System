@@ -5,7 +5,13 @@ const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     const { baseUrl } = req;
     const isProfilePic = baseUrl === "/api/v1/users";
-    cb(null, `${__dirname}/../public/${isProfilePic ? "users" : ""}`);
+    const isCoursePic = baseUrl === "/api/v1/courses";
+    cb(
+      null,
+      `${__dirname}/../public/${
+        isProfilePic ? "users" : isCoursePic ? "courses" : ""
+      }`
+    );
   },
   filename: function (req, file, callback) {
     const fileName =
