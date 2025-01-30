@@ -72,3 +72,11 @@ export const updateProfilePicture = asyncHandler(
     });
   }
 );
+
+/**
+ * TODO:
+ *  - delete user
+ *  - Deactivate user
+ *  - Ban user
+ *  - Get all users
+ */
