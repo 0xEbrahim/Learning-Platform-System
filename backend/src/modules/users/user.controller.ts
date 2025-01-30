@@ -11,6 +11,7 @@ export const getUserInfo = asyncHandler(
     const user = await userService.getUserById(userId);
     if (!user)
       return next(new ApiError("Error while getting user profile", 401));
+    user.password = undefined;
     res.status(200).json({
       status: "Success",
       data: {
@@ -26,6 +27,7 @@ export const getUserById = asyncHandler(
     const user = await userService.getUserById(id);
     if (!user)
       return next(new ApiError("Can't find the user with id: " + id, 404));
+    user.password = undefined;
     res.status(200).json({
       status: "Success",
       data: {
