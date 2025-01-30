@@ -23,6 +23,7 @@ import {
 } from "../../utils/JWT/tokens";
 import { generateTwoStepTemplate } from "../../views/TwoFATemplate";
 import { generateForgotPasswordTemplate } from "../../views/forgotPasswordTemplate";
+import { Response } from "express";
 class AuthService {
   async register(Payload: IUser): Promise<IUser | null> {
     const user = await User.create(Payload);
@@ -71,12 +72,21 @@ class AuthService {
     return result;
   }
 
-  async confirmEmail(Payload: IConfirmEmail): Promise<IUser | null> {
+  async confirmEmail(
+    Payload: IConfirmEmail,
+    res: Response
+  ): Promise<IUser | null> {
     const { email } = Payload;
     const user: (Document & IUser) | null = await User.findOne({
       email: email,
     });
     if (!user) return null;
+    if (user.email_confirmed) {
+      res.status(400).json({
+        status: "Error",
+        message: "This email is already activated, you can log-in",
+      });
+    }
     const token = user.generateEmailConfirmationToken();
     await user.save();
     let link;

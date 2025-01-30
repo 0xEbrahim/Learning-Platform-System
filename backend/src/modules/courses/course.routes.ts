@@ -9,7 +9,7 @@ const router = express.Router();
 router.post(
   "/",
   isAuthenticated,
-  isAuthorized("teacher", "admin"),
+//   isAuthorized("teacher", "admin"),
   uploadSingle,
   createCourse
 );

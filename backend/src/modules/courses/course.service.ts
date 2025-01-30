@@ -18,6 +18,8 @@ class CourseService {
     const course = await Course.create(data);
     return course;
   }
+
+  async editCourse() {}
 }
 
 export const courseService = new CourseService();

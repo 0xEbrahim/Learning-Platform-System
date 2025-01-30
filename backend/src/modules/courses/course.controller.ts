@@ -22,3 +22,7 @@ export const createCourse = asyncHandler(
     });
   }
 );
+
+export const editCourse = asyncHandler(async(req: Request, res: Response, next: NextFunction) => {
+    
+})

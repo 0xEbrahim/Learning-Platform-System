@@ -30,7 +30,7 @@ export const activateEmail = asyncHandler(
 
 export const confirmEmail = asyncHandler(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    const user = await authService.confirmEmail(req.body);
+    const user = await authService.confirmEmail(req.body, res);
     if (!user) return next(new ApiError("Email is not exist.", 404));
     res.status(200).json({
       status: "Success",
