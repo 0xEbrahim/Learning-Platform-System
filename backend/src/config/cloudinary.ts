@@ -9,33 +9,14 @@ cloudinary.config({
 
 export default async function (
   path: string,
-  public_id: string
+  folder: string
 ): Promise<void | UploadApiResponse> {
-
-    const uploadResult = await cloudinary.uploader
+  const uploadResult = await cloudinary.uploader
     .upload(path, {
-      public_id,
+      folder,
     })
     .catch((error) => {
       console.log(error);
     });
-
-  //   console.log(uploadResult);
-
-  //   const optimizeUrl = cloudinary.url("shoes", {
-  //     fetch_format: "auto",
-  //     quality: "auto",
-  //   });
-
-  //   console.log(optimizeUrl);
-
-  //   const autoCropUrl = cloudinary.url("shoes", {
-  //     crop: "auto",
-  //     gravity: "auto",
-  //     width: 500,
-  //     height: 500,
-  //   });
-
-  //   console.log(autoCropUrl);
   uploadResult;
 }

@@ -56,5 +56,6 @@ export const updateUserInfo = asyncHandler(
 );
 
 export const updateProfilePicture = asyncHandler(async(req: Request, res: Response, next: NextFunction) => {
-    
+    console.log(req.file)
+    res.json({})
 })
