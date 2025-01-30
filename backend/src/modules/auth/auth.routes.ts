@@ -27,10 +27,6 @@ import {
 import { isAuthenticated } from "../../middlewares/isAuthenticated";
 const router = express.Router();
 
-router.get("/", (req: Request, res: Response, next: NextFunction) => {
-  res.json({ message: "Hello" });
-});
-
 router.post("/register", validate(authValidation), register);
 router.post("/login", validate(loginValidation), login);
 router.post("/logout", isAuthenticated, logout);

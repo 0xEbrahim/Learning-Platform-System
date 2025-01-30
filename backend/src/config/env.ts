@@ -12,4 +12,7 @@ export default {
   JWT_REFRESH_EXPIRES_IN: process.env.JWT_REFRESH_EXPIRES_IN,
   DEV_URL: process.env.DEV_URL,
   PROD_URL: process.env.PROD_URL,
+  CLOUD_NAME: process.env.CLOUD_NAME,
+  CLOUD_API_KEY: process.env.CLOUD_API_KEY,
+  CLOUD_API_SECRETS: process.env.CLOUD_API_SECRETS,
 };
