@@ -1,5 +1,5 @@
 node_modules
 .env
 dist
-backend/src/public/users/*
-backend/src/public/courses/*
+backend/src/public/courses/
+backend/src/public/users/
