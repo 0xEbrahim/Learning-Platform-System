@@ -2,6 +2,7 @@ import express from "express";
 import { isAuthenticated } from "../../middlewares/isAuthenticated";
 import { uploadMany, uploadSingle } from "../../config/multer";
 import {
+  addQuestion,
   createCourse,
   editCourse,
   getAllCourses,
@@ -22,6 +23,7 @@ router.post(
 router.get("/", isAuthenticated, getAllCourses);
 router.get("/:id", isAuthenticated, getCourse);
 router.get("/content/:id", isAuthenticated, getCourseByUser);
+router.patch("/add-question", isAuthenticated, addQuestion);
 router.patch(
   "/:id",
   isAuthenticated,

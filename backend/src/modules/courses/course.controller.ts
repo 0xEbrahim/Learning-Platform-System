@@ -91,3 +91,22 @@ export const getCourseByUser = asyncHandler(
     });
   }
 );
+
+export const addQuestion = asyncHandler(
+  async (req: IUserRequset, res: Response, next: NextFunction) => {
+    const { question, courseId, contentId } = req.body;
+    const data = {
+      question,
+      contentId,
+      courseId,
+      user: req.user?._id as string,
+    };
+    const course = await courseService.addQuestion(data);
+    res.status(200).json({
+      status: "Success",
+      data: {
+        course,
+      },
+    });
+  }
+);

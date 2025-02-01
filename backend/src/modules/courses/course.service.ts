@@ -1,7 +1,7 @@
 import { Request } from "express";
 import cloudinary from "../../config/cloudinary";
 import ApiFeatures from "../../utils/ApiFeatures";
-import { ICourse } from "./course.interface";
+import { ICourse, IQuestion } from "./course.interface";
 import { Course } from "./course.model";
 import ApiError from "../../utils/ApiError";
 
@@ -80,6 +80,24 @@ class CourseService {
       throw new ApiError("You are not eligable to open this course", 401);
     const course = await Course.findById(courseId);
     return course?.courseData;
+  }
+
+  async addQuestion(Payload: IQuestion) {
+    const { user, question, contentId, courseId } = Payload;
+    const course = await Course.findById(courseId);
+    if (!course) throw new ApiError("Invalid course id", 400);
+    const courseContent = course.courseData.find(
+      (el: any) => el._id.toString() === contentId
+    );
+    if (!courseContent) throw new ApiError("Invalid content id", 400);
+    const newQuestion: any = {
+      user: user,
+      question: question,
+      questionReplies: [],
+    };
+    courseContent.questions.push(newQuestion);
+    await course.save();
+    return course;
   }
 }
 
