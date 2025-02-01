@@ -6,6 +6,7 @@ import {
   editCourse,
   getAllCourses,
   getCourse,
+  getCourseByUser,
 } from "./course.controller";
 import { isAuthorized } from "../../middlewares/isAuthorized";
 
@@ -20,6 +21,7 @@ router.post(
 );
 router.get("/", isAuthenticated, getAllCourses);
 router.get("/:id", isAuthenticated, getCourse);
+router.get("/content/:id", isAuthenticated, getCourseByUser);
 router.patch(
   "/:id",
   isAuthenticated,

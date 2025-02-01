@@ -51,6 +51,12 @@ const userSchema: Schema<IUser> = new Schema<IUser>(
         type: String,
       },
     },
+    courses: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Courses",
+      },
+    ],
     role: {
       type: String,
       default: roles.STUDENT,

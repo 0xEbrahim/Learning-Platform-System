@@ -3,6 +3,7 @@ import cloudinary from "../../config/cloudinary";
 import ApiFeatures from "../../utils/ApiFeatures";
 import { ICourse } from "./course.interface";
 import { Course } from "./course.model";
+import ApiError from "../../utils/ApiError";
 
 class CourseService {
   async createCourse(Payload: any): Promise<ICourse | null> {
@@ -66,8 +67,19 @@ class CourseService {
   }
 
   async getCourse(id: string): Promise<ICourse | null> {
-    const course = await Course.findById(id);
+    const course = await Course.findById(id).select(
+      "-courseData.videoUrl -__v -courseData.questions"
+    );
     return course;
+  }
+
+  async getCourseByUser(Payload: any): Promise<any> {
+    const { courses, courseId } = Payload;
+    const isExist = courses.find((el: any) => el.toString() === courseId);
+    if (!isExist)
+      throw new ApiError("You are not eligable to open this course", 401);
+    const course = await Course.findById(courseId);
+    return course?.courseData;
   }
 }
 

@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { asyncHandler } from "../../utils/asyncHandler";
 import { courseService } from "./course.service";
 import ApiError from "../../utils/ApiError";
+import { IUserRequset } from "../../interfaces/userRequest";
 
 export const createCourse = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -71,6 +72,22 @@ export const getCourse = asyncHandler(
       data: {
         course,
       },
+    });
+  }
+);
+
+export const getCourseByUser = asyncHandler(
+  async (req: IUserRequset, res: Response, next: NextFunction) => {
+    const courses = req.user?.courses;
+    const courseId = req.params.id;
+    const data = {
+      courses,
+      courseId,
+    };
+    const course = await courseService.getCourseByUser(data);
+    res.status(200).json({
+      status: "Success",
+      data: { courseContent: course },
     });
   }
 );

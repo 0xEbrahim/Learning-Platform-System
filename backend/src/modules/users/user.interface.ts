@@ -12,6 +12,7 @@ export interface IUser {
     public_id: string;
     url: string;
   };
+  courses: [string];
   active: boolean;
   email_confirmed: boolean;
   createdAt?: Date;
