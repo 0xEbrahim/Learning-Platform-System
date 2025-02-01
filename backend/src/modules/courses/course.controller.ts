@@ -3,6 +3,7 @@ import { asyncHandler } from "../../utils/asyncHandler";
 import { courseService } from "./course.service";
 import ApiError from "../../utils/ApiError";
 import { IUserRequset } from "../../interfaces/userRequest";
+import { IAnswer } from "./course.interface";
 
 export const createCourse = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -102,6 +103,21 @@ export const addQuestion = asyncHandler(
       user: req.user?._id as string,
     };
     const course = await courseService.addQuestion(data);
+    res.status(200).json({
+      status: "Success",
+      data: {
+        course,
+      },
+    });
+  }
+);
+
+export const addAnswerToQuestion = asyncHandler(
+  async (req: IUserRequset, res: Response, next: NextFunction) => {
+    const { courseId, answer, contentId, questionId } = req.body;
+    const user = req.user?._id as string;
+    const data: IAnswer = { answer, courseId, contentId, user, questionId };
+    const course = await courseService.addAnswerToQuestion(data);
     res.status(200).json({
       status: "Success",
       data: {

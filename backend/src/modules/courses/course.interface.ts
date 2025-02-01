@@ -55,3 +55,9 @@ export interface IQuestion {
 }
 
 export interface IAnswer {
+  user: string;
+  answer: string;
+  courseId: string;
+  contentId: string;
+  questionId: string;
+}

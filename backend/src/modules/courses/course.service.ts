@@ -1,7 +1,7 @@
 import { Request } from "express";
 import cloudinary from "../../config/cloudinary";
 import ApiFeatures from "../../utils/ApiFeatures";
-import { ICourse, IQuestion } from "./course.interface";
+import { IAnswer, ICourse, IQuestion } from "./course.interface";
 import { Course } from "./course.model";
 import ApiError from "../../utils/ApiError";
 
@@ -96,6 +96,27 @@ class CourseService {
       questionReplies: [],
     };
     courseContent.questions.push(newQuestion);
+    await course.save();
+    return course;
+  }
+
+  async addAnswerToQuestion(Payload: IAnswer) {
+    const { user, answer, questionId, contentId, courseId } = Payload;
+    const course = await Course.findById(courseId);
+    if (!course) throw new ApiError("Invalid course id", 400);
+    const courseContent = course.courseData.find(
+      (el: any) => el._id.toString() === contentId
+    );
+    if (!courseContent) throw new ApiError("Invalid content id", 400);
+    const question = courseContent.questions.find(
+      (el: any) => el._id.toString() === questionId
+    );
+    if (!question) throw new ApiError("Invalid question id", 400);
+    const newAnswer: any = {
+      user,
+      answer,
+    };
+    question.questionReplies?.push(newAnswer);
     await course.save();
     return course;
   }
