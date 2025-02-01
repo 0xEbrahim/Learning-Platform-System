@@ -1,7 +1,13 @@
 import { Request } from "express";
 import cloudinary from "../../config/cloudinary";
 import ApiFeatures from "../../utils/ApiFeatures";
-import { IAddReview, IAnswer, ICourse, IQuestion } from "./course.interface";
+import {
+  IAddReview,
+  IAnswer,
+  ICourse,
+  IQuestion,
+  IReviewReply,
+} from "./course.interface";
 import { Course } from "./course.model";
 import ApiError from "../../utils/ApiError";
 import { User } from "../users/user.model";
@@ -139,6 +145,7 @@ class CourseService {
     if (!isExist)
       throw new ApiError("You are not elegiable to add review", 401);
     const course = await Course.findById(courseId);
+    if (!course) throw new ApiError("Invalid course id", 400);
     const newReview: any = {
       comment: review,
       rating,
@@ -147,6 +154,25 @@ class CourseService {
     };
     course?.reviews.push(newReview);
     await course?.save();
+
+    return course;
+  }
+
+  async addReplyToReview(Payload: IReviewReply) {
+    const { comment, courseId, reviewId, user } = Payload;
+    const course = await Course.findById(courseId);
+    if (!course) throw new ApiError("Invalid course id", 400);
+    const review = course.reviews.find(
+      (el: any) => el._id.toString() === reviewId
+    );
+    if (!review) throw new ApiError("Review not found", 404);
+    const replyData: any = {
+      user: user,
+      comment,
+    };
+    if (!review.commentReplies) review.commentReplies = [];
+    review.commentReplies?.push(replyData);
+    await course.save();
     return course;
   }
 }

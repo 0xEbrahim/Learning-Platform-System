@@ -11,7 +11,7 @@ export interface IReview extends Document {
   user: object;
   rating: number;
   comment: string;
-  commentReplies?: IComment[];
+  commentReplies?: object[];
 }
 
 export interface ILink extends Document {
@@ -68,4 +68,11 @@ export interface IAddReview {
   courseId: string;
   rating: number;
   review: string;
+}
+
+export interface IReviewReply {
+  user: string;
+  comment: string;
+  courseId: string;
+  reviewId: string;
 }

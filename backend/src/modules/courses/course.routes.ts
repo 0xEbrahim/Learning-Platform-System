@@ -4,6 +4,7 @@ import { uploadMany, uploadSingle } from "../../config/multer";
 import {
   addAnswerToQuestion,
   addQuestion,
+  addReplyToReview,
   addReview,
   createCourse,
   editCourse,
@@ -28,6 +29,12 @@ router.get("/content/:id", isAuthenticated, getCourseByUser);
 router.patch("/add-question", isAuthenticated, addQuestion);
 router.patch("/add-answer", isAuthenticated, addAnswerToQuestion);
 router.patch("/add-review/:id", isAuthenticated, addReview);
+router.patch(
+  "/add-reply",
+  isAuthenticated,
+  // isAuthorized("admin"),
+  addReplyToReview
+);
 router.patch(
   "/:id",
   isAuthenticated,

@@ -6,6 +6,7 @@ import {
   ILink,
   IReview,
 } from "./course.interface";
+import { object } from "zod";
 
 const reviewSchema: Schema<IReview> = new Schema<IReview>({
   user: {
@@ -18,6 +19,7 @@ const reviewSchema: Schema<IReview> = new Schema<IReview>({
   comment: {
     type: String,
   },
+  commentReplies: [Object],
 });
 
 const linkSchema: Schema<ILink> = new Schema<ILink>({

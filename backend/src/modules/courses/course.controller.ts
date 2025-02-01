@@ -3,7 +3,7 @@ import { asyncHandler } from "../../utils/asyncHandler";
 import { courseService } from "./course.service";
 import ApiError from "../../utils/ApiError";
 import { IUserRequset } from "../../interfaces/userRequest";
-import { IAddReview, IAnswer } from "./course.interface";
+import { IAddReview, IAnswer, IReviewReply } from "./course.interface";
 
 export const createCourse = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -134,6 +134,28 @@ export const addReview = asyncHandler(
     const user = req.user?._id as string;
     const data: IAddReview = { user, courseId, rating, review };
     const course = await courseService.addReview(data);
+    const notification = {
+      title: "New review Recieved",
+      message: `${req.user?.name} has given a review on ${course?.name}`,
+    };
+
+    // Create notification
+
+    res.status(200).json({
+      status: "Success",
+      data: {
+        course,
+      },
+    });
+  }
+);
+
+export const addReplyToReview = asyncHandler(
+  async (req: IUserRequset, res: Response, next: NextFunction) => {
+    const user = req.user?._id as string;
+    const { courseId, reviewId, comment } = req.body;
+    const body: IReviewReply = { user, courseId, reviewId, comment };
+    const course = await courseService.addReplyToReview(body);
     res.status(200).json({
       status: "Success",
       data: {
