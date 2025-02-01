@@ -48,3 +48,29 @@ export const editCourse = asyncHandler(
     });
   }
 );
+
+export const getAllCourses = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const courses = await courseService.getAllCourses(req);
+    res.status(200).json({
+      status: "Success",
+      data: { courses },
+    });
+  }
+);
+
+export const getCourse = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const course = await courseService.getCourse(req.params.id);
+    if (!course)
+      return next(
+        new ApiError("Cannot find course of id: " + req.params.id, 404)
+      );
+    res.status(200).json({
+      status: "Success",
+      data: {
+        course,
+      },
+    });
+  }
+);

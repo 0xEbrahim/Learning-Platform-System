@@ -1,4 +1,6 @@
+import { Request } from "express";
 import cloudinary from "../../config/cloudinary";
+import ApiFeatures from "../../utils/ApiFeatures";
 import { ICourse } from "./course.interface";
 import { Course } from "./course.model";
 
@@ -50,6 +52,21 @@ class CourseService {
       data.courseData[0].videoUrl = uplaodedVideo.secure_url;
     }
     const course = await Course.findByIdAndUpdate(id, data, { new: true });
+    return course;
+  }
+
+  async getAllCourses(req: Request): Promise<ICourse[] | null> {
+    const features = new ApiFeatures(Course.find(), req.query)
+      .filter()
+      .limitFields()
+      .sort()
+      .paginate();
+    const courses = await features.query;
+    return courses;
+  }
+
+  async getCourse(id: string): Promise<ICourse | null> {
+    const course = await Course.findById(id);
     return course;
   }
 }
