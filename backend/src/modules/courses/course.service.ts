@@ -1,9 +1,10 @@
 import { Request } from "express";
 import cloudinary from "../../config/cloudinary";
 import ApiFeatures from "../../utils/ApiFeatures";
-import { IAnswer, ICourse, IQuestion } from "./course.interface";
+import { IAddReview, IAnswer, ICourse, IQuestion } from "./course.interface";
 import { Course } from "./course.model";
 import ApiError from "../../utils/ApiError";
+import { User } from "../users/user.model";
 
 class CourseService {
   async createCourse(Payload: any): Promise<ICourse | null> {
@@ -118,6 +119,34 @@ class CourseService {
     };
     question.questionReplies?.push(newAnswer);
     await course.save();
+    // TODO:
+    if (user === question.user.toString()) {
+      // Create a notification
+    } else {
+      // Send Email
+    }
+    return course;
+  }
+
+  async addReview(Payload: IAddReview) {
+    const { user, courseId, rating, review } = Payload;
+    let userCourseList = (await User.findById(user))?.courses;
+    if (!userCourseList)
+      throw new ApiError("You are not elegiable to add review", 401);
+    const isExist = userCourseList.find(
+      (el: any) => el.toString() === courseId
+    );
+    if (!isExist)
+      throw new ApiError("You are not elegiable to add review", 401);
+    const course = await Course.findById(courseId);
+    const newReview: any = {
+      comment: review,
+      rating,
+      courseId,
+      user,
+    };
+    course?.reviews.push(newReview);
+    await course?.save();
     return course;
   }
 }

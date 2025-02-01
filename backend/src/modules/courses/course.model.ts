@@ -98,4 +98,12 @@ const courseSchema: Schema<ICourse> = new Schema<ICourse>(
   { timestamps: true }
 );
 
+courseSchema.pre("save", function (next) {
+  let avg = 0;
+  this.reviews.forEach((el) => (avg += el.rating));
+  avg = avg / this.reviews.length;
+  this.ratings = avg;
+  next();
+});
+
 export const Course: Model<ICourse> = mongoose.model("Course", courseSchema);

@@ -4,6 +4,7 @@ import { uploadMany, uploadSingle } from "../../config/multer";
 import {
   addAnswerToQuestion,
   addQuestion,
+  addReview,
   createCourse,
   editCourse,
   getAllCourses,
@@ -17,7 +18,7 @@ const router = express.Router();
 router.post(
   "/",
   isAuthenticated,
-  //   isAuthorized("teacher", "admin"),
+  isAuthorized("teacher", "admin"),
   uploadMany,
   createCourse
 );
@@ -26,7 +27,7 @@ router.get("/:id", isAuthenticated, getCourse);
 router.get("/content/:id", isAuthenticated, getCourseByUser);
 router.patch("/add-question", isAuthenticated, addQuestion);
 router.patch("/add-answer", isAuthenticated, addAnswerToQuestion);
-
+router.patch("/add-review/:id", isAuthenticated, addReview);
 router.patch(
   "/:id",
   isAuthenticated,

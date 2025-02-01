@@ -1,7 +1,8 @@
 import { Document } from "mongoose";
+import { IUser } from "../users/user.interface";
 
 export interface IComment extends Document {
-  user: object;
+  user: string;
   question: string;
   questionReplies?: IComment[];
 }
@@ -60,4 +61,11 @@ export interface IAnswer {
   courseId: string;
   contentId: string;
   questionId: string;
+}
+
+export interface IAddReview {
+  user: string;
+  courseId: string;
+  rating: number;
+  review: string;
 }
