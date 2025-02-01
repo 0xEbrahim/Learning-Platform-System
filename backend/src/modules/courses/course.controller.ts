@@ -7,9 +7,12 @@ import ApiError from "../../utils/ApiError";
 export const createCourse = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const data = req.body;
-    const thumbnail = req.file;
+    const input : object[] = req.files as object[];
+    const thumbnail = input[0];
+    const video = input[1];
     const body = {
-      thumbnail,
+      video: video,
+      thumbnail: thumbnail,
       ...data,
     };
     const course = await courseService.createCourse(body);
@@ -23,6 +26,6 @@ export const createCourse = asyncHandler(
   }
 );
 
-export const editCourse = asyncHandler(async(req: Request, res: Response, next: NextFunction) => {
-    
-})
+export const editCourse = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {}
+);

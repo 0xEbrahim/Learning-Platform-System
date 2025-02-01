@@ -6,7 +6,6 @@ import {
   ILink,
   IReview,
 } from "./course.interface";
-import { number } from "zod";
 
 const reviewSchema: Schema<IReview> = new Schema<IReview>({
   user: {

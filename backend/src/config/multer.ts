@@ -31,7 +31,9 @@ const fileFilter = (req: any, file: any, cb: any) => {
   if (
     file.mimetype === "image/jpeg" ||
     file.mimetype === "image/png" ||
-    file.mimetype === "image/jpg"
+    file.mimetype === "image/jpg" ||
+    file.mimetype === "video/mp4" ||
+    file.mimetype === "video/mpeg"
   )
     cb(null, true);
   else cb({ message: "Unsupported file format" }, false);
@@ -44,4 +46,4 @@ const uplaoder = multer({
 });
 
 export const uploadSingle = uplaoder.single("image");
-export const uploadMany = uplaoder.array("image");
+export const uploadMany = uplaoder.array("data");
