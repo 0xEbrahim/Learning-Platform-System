@@ -1,7 +1,12 @@
 import express from "express";
 import { isAuthenticated } from "../../middlewares/isAuthenticated";
 import { uploadMany, uploadSingle } from "../../config/multer";
-import { createCourse, editCourse } from "./course.controller";
+import {
+  createCourse,
+  editCourse,
+  getAllCourses,
+  getCourse,
+} from "./course.controller";
 import { isAuthorized } from "../../middlewares/isAuthorized";
 
 const router = express.Router();
@@ -13,9 +18,10 @@ router.post(
   uploadMany,
   createCourse
 );
-
+router.get("/", isAuthenticated, getAllCourses);
+router.get("/:id", isAuthenticated, getCourse);
 router.patch(
-  "/edit-course/:id",
+  "/:id",
   isAuthenticated,
   //   isAuthorized("teacher", "admin"),
   uploadMany,
