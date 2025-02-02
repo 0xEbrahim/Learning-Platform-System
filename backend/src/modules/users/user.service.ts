@@ -76,6 +76,13 @@ class UserService {
     const users = await features.query;
     return users;
   }
+
+  async updateUserRole(Payload: any) {
+    const { id, role } = Payload;
+    const user = await User.findByIdAndUpdate(id, { role }, { new: true });
+    if (!user) throw new ApiError("Invalid user id", 404);
+    return user;
+  }
 }
 
 export const userService = new UserService();

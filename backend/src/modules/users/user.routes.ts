@@ -6,10 +6,12 @@ import {
   getUserInfo,
   updateProfilePicture,
   updateUserInfo,
+  updateUserRole,
 } from "./user.controller";
 import { uploadSingle } from "../../config/multer";
 import validate from "../../utils/zodValidate";
 import { getUserByIdValidation, updateInfoValidation } from "./user.validation";
+import { isAuthorized } from "../../middlewares/isAuthorized";
 
 const router = express.Router();
 
@@ -26,6 +28,12 @@ router.patch(
   isAuthenticated,
   validate(updateInfoValidation),
   updateUserInfo
+);
+router.patch(
+  "/update-role",
+  isAuthenticated,
+  isAuthorized("admin"),
+  updateUserRole
 );
 router.patch(
   "/update-pic",

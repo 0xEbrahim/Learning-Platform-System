@@ -85,6 +85,20 @@ export const getAllUsers = asyncHandler(
   }
 );
 
+export const updateUserRole = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id, role } = req.body;
+    const data = { id, role };
+    const user = await userService.updateUserRole(data);
+    res.status(200).json({
+      status: "Success",
+      data: {
+        user,
+      },
+    });
+  }
+);
+
 /**
  * TODO:
  *  - delete user
