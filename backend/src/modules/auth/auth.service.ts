@@ -45,7 +45,6 @@ class AuthService {
   async activateEmail(Payload: string): Promise<IResponse> {
     const token = Payload;
     const encoded = crypto.createHash("sha256").update(token).digest("hex");
-    // console.log(encoded);
     const user: (Document & IUser) | null = await User.findOne({
       emailConfirmationToken: encoded,
       emailConfirmationTokenExpires: {
@@ -118,7 +117,7 @@ class AuthService {
     if (!user.email_confirmed) {
       result.message =
         "Cannot login before confirming your email, please confirm it and try again.";
-      result.status = "error";
+      result.status = "Error";
       result.statusCode = 409;
       return result;
     }
@@ -142,6 +141,11 @@ class AuthService {
       return result;
     }
     user.password = undefined;
+    user.passwordResetToken = undefined;
+    user.passwordResetTokenExpires = undefined;
+    user.passwordChangedAt = undefined;
+    user.OTP = undefined;
+    user.OTPExpires = undefined
     result.data = user;
     const token = generateToken(user._id as string);
     const refreshToken = generateRefreshToken(user._id as string);
