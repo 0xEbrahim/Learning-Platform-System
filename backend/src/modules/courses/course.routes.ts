@@ -7,6 +7,7 @@ import {
   addReplyToReview,
   addReview,
   createCourse,
+  deleteCourse,
   editCourse,
   getAllCourses,
   getCourse,
@@ -29,6 +30,7 @@ router.get("/content/:id", isAuthenticated, getCourseByUser);
 router.patch("/add-question", isAuthenticated, addQuestion);
 router.patch("/add-answer", isAuthenticated, addAnswerToQuestion);
 router.patch("/add-review/:id", isAuthenticated, addReview);
+router.delete("/:id", isAuthenticated, deleteCourse);
 router.patch(
   "/add-reply",
   isAuthenticated,
@@ -38,7 +40,7 @@ router.patch(
 router.patch(
   "/:id",
   isAuthenticated,
-    isAuthorized("teacher", "admin"),
+  isAuthorized("teacher", "admin"),
   uploadMany,
   editCourse
 );
