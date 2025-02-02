@@ -81,6 +81,13 @@ class CourseService {
     return course;
   }
 
+  async deleteCourse(Payload: any) {
+    const course = await Course.findById(Payload);
+    if (!course) throw new ApiError("Invalid user id", 404);
+    await Course.findByIdAndDelete(course._id);
+    return course;
+  }
+
   async getCourseByUser(Payload: any): Promise<any> {
     const { courses, courseId } = Payload;
     const isExist = courses.find((el: any) => el.toString() === courseId);

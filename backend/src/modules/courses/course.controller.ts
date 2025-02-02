@@ -77,6 +77,16 @@ export const getCourse = asyncHandler(
   }
 );
 
+export const deleteCourse = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    await courseService.deleteCourse(req.params.id);
+    res.status(200).json({
+      status: "Success",
+      message: "Course deleted successfully",
+    });
+  }
+);
+
 export const getCourseByUser = asyncHandler(
   async (req: IUserRequset, res: Response, next: NextFunction) => {
     const courses = req.user?.courses;
