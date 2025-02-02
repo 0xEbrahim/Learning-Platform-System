@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { asyncHandler } from "../../utils/asyncHandler";
 import { IOrder } from "./order.interface";
-import { User } from "../users/user.model";
 import { IUserRequset } from "../../interfaces/userRequest";
 import { orderService } from "./order.service";
 import ApiError from "../../utils/ApiError";
