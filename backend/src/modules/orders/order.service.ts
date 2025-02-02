@@ -21,8 +21,9 @@ class OrderService {
       courseId: course._id,
       userId: user?._id,
     };
-    const order = Order.create(data);
-    const mailData = {
+    const newOrder = await Order.create(data);
+    // newOrder.populate("userId");
+    const order = {
       order: {
         _id: courseId.toString().slice(0, 6),
         name: course.name,
@@ -36,7 +37,7 @@ class OrderService {
     };
     const html = await ejs.renderFile(
       path.join(__dirname, "../../views/email-confirmation.ejs"),
-      { order: mailData }
+      order
     );
     try {
       if (user) {
@@ -57,7 +58,7 @@ class OrderService {
       title: "New order",
       message: "You have a new Order for " + course.name + " Course",
     });
-    return order;
+    return newOrder;
   }
 }
 
