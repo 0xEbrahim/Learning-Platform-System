@@ -1,6 +1,7 @@
 import express from "express";
 import { isAuthenticated } from "../../middlewares/isAuthenticated";
 import {
+  deleteUser,
   getAllUsers,
   getUserById,
   getUserInfo,
@@ -23,6 +24,7 @@ router.get(
   validate(getUserByIdValidation),
   getUserById
 );
+router.delete("/:id", isAuthenticated, isAuthorized("admin"), deleteUser);
 router.patch(
   "/update-me",
   isAuthenticated,

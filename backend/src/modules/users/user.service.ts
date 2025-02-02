@@ -83,6 +83,13 @@ class UserService {
     if (!user) throw new ApiError("Invalid user id", 404);
     return user;
   }
+
+  async deleteUser(Payload: any) {
+    const user = await User.findById(Payload);
+    if (!user) throw new ApiError("Invalid user id", 404);
+    await User.findByIdAndDelete(user._id);
+    return user;
+  }
 }
 
 export const userService = new UserService();

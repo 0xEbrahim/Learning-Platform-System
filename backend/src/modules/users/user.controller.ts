@@ -99,9 +99,18 @@ export const updateUserRole = asyncHandler(
   }
 );
 
+export const deleteUser = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    await userService.deleteUser(req.params.id);
+    res.status(200).json({
+      status: "Success",
+      message: "User deleted successfully",
+    });
+  }
+);
+
 /**
  * TODO:
- *  - delete user
  *  - Deactivate user
  *  - Ban user
  */

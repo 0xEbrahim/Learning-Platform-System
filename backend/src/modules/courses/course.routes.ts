@@ -32,13 +32,13 @@ router.patch("/add-review/:id", isAuthenticated, addReview);
 router.patch(
   "/add-reply",
   isAuthenticated,
-  // isAuthorized("admin"),
+  isAuthorized("admin"),
   addReplyToReview
 );
 router.patch(
   "/:id",
   isAuthenticated,
-  //   isAuthorized("teacher", "admin"),
+    isAuthorized("teacher", "admin"),
   uploadMany,
   editCourse
 );
