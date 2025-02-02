@@ -8,6 +8,7 @@ import { generateActivationTemplate } from "../../views/ActivationTemplate";
 import sendEmail from "../../config/email";
 import cloudinary from "../../config/cloudinary";
 import { UploadApiResponse } from "cloudinary";
+import ApiFeatures from "../../utils/ApiFeatures";
 class UserService {
   async getUserById(id: string): Promise<(Document & IUser) | null> {
     const user: (Document & IUser) | null = await User.findById(id);
@@ -63,6 +64,17 @@ class UserService {
     await user.save();
     user.password = undefined;
     return user;
+  }
+
+  async getAllUsers(payload: any) {
+    const features = new ApiFeatures(User.find(), payload)
+      .filter()
+      .sort()
+      .limitFields()
+      .paginate();
+    features.query.sort({ createdAt: -1 });
+    const users = await features.query;
+    return users;
   }
 }
 

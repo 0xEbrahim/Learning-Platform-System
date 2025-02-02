@@ -73,10 +73,21 @@ export const updateProfilePicture = asyncHandler(
   }
 );
 
+export const getAllUsers = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const users = await userService.getAllUsers(req.query);
+    res.status(200).json({
+      status: "Success",
+      data: {
+        users,
+      },
+    });
+  }
+);
+
 /**
  * TODO:
  *  - delete user
  *  - Deactivate user
  *  - Ban user
- *  - Get all users
  */
