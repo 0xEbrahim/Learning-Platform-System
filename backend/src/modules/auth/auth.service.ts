@@ -45,7 +45,7 @@ class AuthService {
   async activateEmail(Payload: string): Promise<IResponse> {
     const token = Payload;
     const encoded = crypto.createHash("sha256").update(token).digest("hex");
-    console.log(encoded);
+    // console.log(encoded);
     const user: (Document & IUser) | null = await User.findOne({
       emailConfirmationToken: encoded,
       emailConfirmationTokenExpires: {
@@ -183,7 +183,7 @@ class AuthService {
     if (config.NODE_ENV === "development")
       link = `${config.DEV_URL}api/v1/auth/confirm-2fa`;
     else link = `${config.PROD_URL}api/v1/auth/confirm-2fa`;
-    console.log(link);
+    // console.log(link);
     const template = generateTwoStepTemplate(otp, user.name, link);
     const data = {
       email: user.email,
