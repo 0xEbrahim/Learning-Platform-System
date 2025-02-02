@@ -11,6 +11,7 @@ import {
 import { Course } from "./course.model";
 import ApiError from "../../utils/ApiError";
 import { User } from "../users/user.model";
+import { Notification } from "../notifications/notifications.model";
 
 class CourseService {
   async createCourse(Payload: any): Promise<ICourse | null> {
@@ -103,6 +104,11 @@ class CourseService {
       questionReplies: [],
     };
     courseContent.questions.push(newQuestion);
+    await Notification.create({
+      user: user,
+      title: "New Question Recieved",
+      message: `You have a new question in ${courseContent.title}`,
+    });
     await course.save();
     return course;
   }
@@ -127,7 +133,11 @@ class CourseService {
     await course.save();
     // TODO:
     if (user === question.user.toString()) {
-      // Create a notification
+      await Notification.create({
+        user: user,
+        title: "New Question Reply Recieved",
+        message: `You have a new question in ${courseContent.title}`,
+      });
     } else {
       // Send Email
     }
