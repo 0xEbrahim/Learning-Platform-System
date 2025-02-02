@@ -1,6 +1,7 @@
 import express from "express";
 import { isAuthenticated } from "../../middlewares/isAuthenticated";
 import {
+  getAllUsers,
   getUserById,
   getUserInfo,
   updateProfilePicture,
@@ -12,6 +13,7 @@ import { getUserByIdValidation, updateInfoValidation } from "./user.validation";
 
 const router = express.Router();
 
+router.get("/", isAuthenticated, getAllUsers);
 router.get("/me", isAuthenticated, getUserInfo);
 router.get(
   "/:id",

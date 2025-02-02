@@ -18,3 +18,15 @@ export const creatOrder = asyncHandler(
     });
   }
 );
+
+export const getAllOrders = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const orders = await orderService.getAllCourse(req.query);
+    res.status(200).json({
+      status: "Success",
+      data: {
+        orders,
+      },
+    });
+  }
+);

@@ -7,6 +7,7 @@ import { Order } from "./order.model";
 import path from "node:path";
 import sendEmail from "../../config/email";
 import { Notification } from "../notifications/notifications.model";
+import ApiFeatures from "../../utils/ApiFeatures";
 
 class OrderService {
   async createOrder(Payload: IOrder): Promise<any> {
@@ -59,6 +60,17 @@ class OrderService {
       message: "You have a new Order for " + course.name + " Course",
     });
     return newOrder;
+  }
+
+  async getAllCourse(Payload: any) {
+    const features = new ApiFeatures(Order.find(), Payload)
+      .filter()
+      .sort()
+      .limitFields()
+      .paginate();
+    features.query.sort({ createdAt: -1 });
+    const orders = await features.query;
+    return orders;
   }
 }
 
