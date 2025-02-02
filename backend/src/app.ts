@@ -12,6 +12,7 @@ import { globalErrorHandler } from "./middlewares/error";
 import { userRouter } from "./modules/users/user.routes";
 import { courseRouter } from "./modules/courses/course.routes";
 import { orderRouter } from "./modules/orders/order.routes";
+import { notificationRouter } from "./modules/notifications/notification.routes";
 const app = express();
 const limiter = rateLimit({
   windowMs: 10 * 60 * 1000,
@@ -38,6 +39,7 @@ app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/courses", courseRouter);
 app.use("/api/v1/orders", orderRouter);
+app.use("/api/v1/notifications", notificationRouter);
 app.use(globalErrorHandler);
 
 app.all("*", (req: Request, res: Response, next: NextFunction) => {

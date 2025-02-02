@@ -10,6 +10,7 @@ class NotificationService {
       .paginate();
     features.query.sort({ createdAt: -1 });
     const notifications = await features.query;
+    return notifications;
   }
 }
 
