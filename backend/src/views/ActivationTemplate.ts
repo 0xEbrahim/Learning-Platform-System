@@ -79,7 +79,6 @@ export const generateActivationTemplate =  (
       <h1>Activate Your Account</h1>
       <p>Hi ${name},</p>
       <p>Thank you for signing up with Learner! To complete your registration, please use the activation code below:</p>
-      <div class="activation-code">${Code}</div>
       <p>Here’s how to use it:</p>
       <ol style="text-align: left; max-width: 400px; margin: 0 auto;">
         <li>Go to the activation page: <a href=${activationLink}>Here</a></li>

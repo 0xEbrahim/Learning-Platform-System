@@ -1,7 +1,6 @@
 import crypto from "crypto";
 import { Document } from "mongoose";
 import {
-  IActivationBody,
   IConfirmEmail,
   IConfirmTwoStepAuth,
   IForgotPassword,
@@ -31,8 +30,8 @@ class AuthService {
     await user.save();
     let link;
     if (config.NODE_ENV === "development")
-      link = `${config.DEV_URL}api/v1/auth/activate-account`;
-    else link = `${config.PROD_URL}api/v1/auth/activate-account`;
+      link = `${config.DEV_URL}api/v1/auth/activate-account/${token}`;
+    else link = `${config.PROD_URL}api/v1/auth/activate-account/${token}`;
     const template = generateActivationTemplate(token, user.name, link);
     const data = {
       email: user.email,
@@ -43,8 +42,8 @@ class AuthService {
     return user;
   }
 
-  async activateEmail(Payload: IActivationBody): Promise<IResponse> {
-    const { token } = Payload;
+  async activateEmail(Payload: string): Promise<IResponse> {
+    const token = Payload;
     const encoded = crypto.createHash("sha256").update(token).digest("hex");
     console.log(encoded);
     const user: (Document & IUser) | null = await User.findOne({
@@ -91,8 +90,8 @@ class AuthService {
     await user.save();
     let link;
     if (config.NODE_ENV === "development")
-      link = `${config.DEV_URL}api/v1/auth/activate-account`;
-    else link = `${config.PROD_URL}api/v1/auth/activate-account`;
+      link = `${config.DEV_URL}api/v1/auth/activate-account/${token}`;
+    else link = `${config.PROD_URL}api/v1/auth/activate-account/${token}`;
     const template = generateActivationTemplate(token, user.name, link);
     const data = {
       email: user.email,

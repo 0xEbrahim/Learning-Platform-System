@@ -16,7 +16,7 @@ export const authValidation = z.object({
 });
 
 export const activateEmailValidation = z.object({
-  body: z.object({
+  params: z.object({
     token: z.string(),
   }),
 });

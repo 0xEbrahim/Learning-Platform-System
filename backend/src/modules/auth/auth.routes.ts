@@ -31,7 +31,7 @@ router.post("/register", validate(authValidation), register);
 router.post("/login", validate(loginValidation), login);
 router.post("/logout", isAuthenticated, logout);
 router.get(
-  "/activate-account",
+  "/activate-account/:token",
   validate(activateEmailValidation),
   activateEmail
 );

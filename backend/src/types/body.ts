@@ -1,9 +1,7 @@
 import { Document } from "mongoose";
 import { IUser } from "../modules/users/user.interface";
 
-export type IActivationBody = {
-  token: string;
-};
+
 
 export type IConfirmEmail = {
   email: string;

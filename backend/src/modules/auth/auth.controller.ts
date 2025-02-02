@@ -24,7 +24,7 @@ export const register = asyncHandler(
 
 export const activateEmail = asyncHandler(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    const data: IResponse = await authService.activateEmail(req.body);
+    const data: IResponse = await authService.activateEmail(req.params.token);
     sendResponse(res, data);
   }
 );
